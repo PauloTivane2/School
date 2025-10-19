@@ -1,0 +1,111 @@
+/* =======================================
+   Layout geral da tabela e cabeçalho
+   ======================================= */
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 1200px;
+    /* Garante scroll horizontal */
+    font-size: 0.75rem;
+    /* texto pequeno */
+}
+
+thead th {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(90deg, #4f46e5, #8b5cf6, #4f46e5);
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    padding: 0.5rem;
+    z-index: 10;
+    background-size: 200% auto;
+    animation: gradientMove 6s ease infinite;
+}
+
+tbody td {
+    padding: 0.5rem;
+    text-align: center;
+}
+
+tbody tr:hover {
+    background-color: #f3f4f6;
+}
+
+thead th:first-child,
+tbody td:first-child {
+    text-align: left;
+    padding-left: 0.75rem;
+}
+
+
+/* =======================================
+   Animação de gradiente no cabeçalho
+   ======================================= */
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+/* =======================================
+   Botões e inputs da tabela
+   ======================================= */
+
+input,
+textarea,
+select,
+button {
+    font-family: inherit;
+    font-size: 0.75rem;
+}
+
+button:disabled {
+    cursor: not-allowed;
+}
+
+
+/* =======================================
+   Scroll horizontal do container da tabela
+   ======================================= */
+
+div.overflow-x-auto {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+
+/* =======================================
+   Tooltip de erro (se quiser adicionar no futuro)
+   ======================================= */
+
+.tooltip {
+    position: absolute;
+    background-color: #fef2f2;
+    color: #b91c1c;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.625rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+}
+
+
+/* =======================================
+   Responsividade
+   ======================================= */
+
+@media (max-width: 768px) {
+    table {
+        min-width: 900px;
+    }
+}
