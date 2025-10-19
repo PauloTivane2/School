@@ -1,0 +1,37 @@
+{
+  // ⚙️ Habilita suporte completo ao Tailwind CSS
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "editor.inlineSuggest.enabled": true,
+  "tailwindCSS.includeLanguages": {
+    "plaintext": "html",
+    "javascript": "javascriptreact",
+    "typescript": "typescriptreact",
+    "html": "html"
+  },
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.experimental.classRegex": [
+    ["tw`([^`]*)", "'([^']*)", "\"([^\"]*)"]
+  ],
+
+  // 🧩 Corrige o erro “Unknown at rule @tailwind”
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "less.lint.unknownAtRules": "ignore",
+  "css.validate": false,
+
+  // 🎨 Melhora o autocompletar e a leitura
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+
+  // 💡 Outras boas práticas
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  "editor.minimap.enabled": false,
+  "files.eol": "\n"
+}
+

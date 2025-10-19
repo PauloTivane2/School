@@ -1,0 +1,104 @@
+.table-container {
+    width: 100%;
+    border-radius: 1rem;
+    border: 4px solid #a5b4fc;
+    background: #fff;
+    overflow: hidden;
+    /* importante para conter o cabeçalho */
+}
+
+
+/* Cabeçalho azul que fica fixo no topo */
+
+.table-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    width: 100%;
+    background: linear-gradient(to right, #4f46e5 0%, #7c3aed 50%, #4f46e5 100%);
+    background-size: 200% auto;
+    color: white;
+    padding: 0.6rem 1rem;
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+    animation: gradientMove 6s ease infinite;
+    text-align: center;
+}
+
+
+/* Animação do gradiente */
+
+@keyframes gradientMove {
+    0%,
+    100% {
+        background-position: 0% center;
+    }
+    50% {
+        background-position: 100% center;
+    }
+}
+
+
+/* Container de scroll APENAS para a tabela */
+
+.table-container>.overflow-x-auto {
+    overflow-x: auto;
+    overflow-y: visible;
+    scrollbar-color: #6366f1 #e5e7eb;
+    scrollbar-width: thin;
+}
+
+
+/* Tabela */
+
+.grades-table {
+    width: 100%;
+    min-width: 1200px;
+    border-collapse: collapse;
+}
+
+.grades-table th,
+.grades-table td {
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+.grades-table th {
+    background-color: #f3f4f6;
+    font-weight: 1050;
+}
+
+
+/* Inputs numéricos */
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 6px;
+    padding: 4px 8px;
+    width: 100%;
+}
+
+input[type=number]:focus {
+    border-color: rgba(99, 102, 241, 0.5);
+    outline: none;
+    box-shadow: 0 0 4px rgba(99, 102, 241, 0.25);
+}
+
+
+/* Hover nas linhas */
+
+.grades-table tbody tr:hover {
+    background-color: rgba(99, 102, 241, 0.05);
+    transition: background-color 0.2s ease;
+}

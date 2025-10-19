@@ -1,0 +1,31 @@
+# docker-compose.yml
+version: '3.8'
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: seu_usuario
+      POSTGRES_PASSWORD: sua_senha
+      POSTGRES_DB: school_management
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=seu_usuario
+      - DB_NAME=school_management
+      - DB_PASSWORD=sua_senha
+      - DB_PORT=5432
+      - NODE_ENV=development
+      - CORS_ORIGIN=http://localhost:3000
+      - PORT=3000
+      - JWT_SECRET=sua_chave_secreta_aqui
+volumes:
+  pgdata:

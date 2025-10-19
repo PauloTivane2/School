@@ -1,0 +1,11 @@
+mkdir -p src/config
+mkdir -p src/modules/auth
+mkdir -p src/modules/students
+mkdir -p src/modules/payments
+mkdir -p src/modules/attendance
+mkdir -p src/modules/grades
+mkdir -p src/modules/exams
+mkdir -p src/modules/reports
+mkdir -p src/shared/middlewares
+mkdir -p src/shared/utils
+mkdir -p src/database
