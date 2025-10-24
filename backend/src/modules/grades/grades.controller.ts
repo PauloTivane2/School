@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { GradesService } from './grades.service';
-import { ApiResponse } from '../../shared/utils/response.util';
-import { asyncHandler } from '../../middleware/error-handler.middleware';
+import { ApiResponse } from '../../common/utils/response.util';
+import { asyncHandler } from '../../core/middleware/error-handler.middleware';
 
 export class GradesController {
   private service: GradesService;

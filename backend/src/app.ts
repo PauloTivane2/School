@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import { initDatabase } from './config/database';
 
 // Middlewares globais
-import { errorHandler } from './middleware/error-handler.middleware';
+import { errorHandler } from './core/middleware/error-handler.middleware';
 
 // Rotas centralizadas
 import routes from './routes';

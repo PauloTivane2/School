@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { StudentsService } from './students.service';
-import { ApiResponse } from '../../shared/utils/response.util';
-import { asyncHandler } from '../../middleware/error-handler.middleware';
+import { ApiResponse } from '../../common/utils/response.util';
+import { asyncHandler } from '../../core/middleware/error-handler.middleware';
 
 /**
  * Controller para endpoints de estudantes

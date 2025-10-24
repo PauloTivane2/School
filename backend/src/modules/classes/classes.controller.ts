@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { ClassesService } from './classes.service';
-import { ApiResponse } from '../../shared/utils/response.util';
-import { asyncHandler } from '../../middleware/error-handler.middleware';
+import { ApiResponse } from '../../common/utils/response.util';
+import { asyncHandler } from '../../core/middleware/error-handler.middleware';
 
 export class ClassesController {
   private service: ClassesService;
