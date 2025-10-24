@@ -72,7 +72,7 @@ const AttendanceForm = ({ turmaId, date, onClose }: AttendanceFormProps) => {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white p-8 rounded-2xl shadow-2xl">
           <div className="animate-spin rounded-full h-12 w-12 border-4 border-green-500 border-t-transparent mx-auto"></div>
-          <p className="mt-4 text-gray-600 font-medium">Carregando alunos...</p>
+          <p className="mt-4 text-primary/70 font-medium">Carregando alunos...</p>
         </div>
       </div>
     );
@@ -115,7 +115,7 @@ const AttendanceForm = ({ turmaId, date, onClose }: AttendanceFormProps) => {
         <div className="p-6 overflow-y-auto max-h-[70vh]">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-gray-100 text-left text-gray-700">
+              <tr className="bg-neutral-bg text-left text-primary/80">
                 <th className="p-3">Aluno</th>
                 <th className="p-3 text-center">Presente</th>
               </tr>
@@ -129,7 +129,7 @@ const AttendanceForm = ({ turmaId, date, onClose }: AttendanceFormProps) => {
                       type="checkbox"
                       checked={s.presente}
                       onChange={() => togglePresence(s.id)}
-                      className="w-5 h-5 text-green-600"
+                      className="w-5 h-5 text-secondary"
                     />
                   </td>
                 </tr>
@@ -141,7 +141,7 @@ const AttendanceForm = ({ turmaId, date, onClose }: AttendanceFormProps) => {
             <button
               onClick={handleSubmit}
               disabled={saving}
-              className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold shadow"
+              className="px-6 py-3 bg-secondary text-white rounded-lg hover:bg-green-700 font-semibold shadow"
             >
               {saving ? 'Salvando...' : 'Salvar Presenças'}
             </button>

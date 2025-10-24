@@ -99,24 +99,24 @@ const FuncionariosList = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-4">
-          <h2 className="text-xl font-bold text-gray-800">Gestão de Funcionários</h2>
-          <span className="text-gray-700 font-medium bg-gray-100 px-2 py-1 rounded shadow-sm">
+          <h2 className="text-xl font-bold text-primary">Gestão de Funcionários</h2>
+          <span className="text-primary/80 font-medium bg-neutral-bg px-2 py-1 rounded shadow-sm">
             Total: {filtered.length}
           </span>
         </div>
 
         <div className="flex items-center gap-2">
-          <label className="font-medium text-gray-700">Pesquisar:</label>
+          <label className="font-medium text-primary/80">Pesquisar:</label>
           <input
             type="text"
             placeholder="Nome, Cargo ou Usuário..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="px-3 py-1.4 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500"
+            className="px-3 py-1.4 border border-primary/20 rounded-md focus:ring-2 focus:ring-yellow-500"
           />
           <button
             onClick={() => { setEditFuncionario(null); setShowForm(true); }}
-            className="px-3 py-1 bg-yellow-600 text-white rounded flex items-center gap-1 hover:bg-yellow-700"
+            className="px-3 py-1 bg-secondary text-white rounded flex items-center gap-1 hover:bg-secondary/90"
           >
             <Plus size={14} /> Adicionar
           </button>
@@ -126,7 +126,7 @@ const FuncionariosList = () => {
       {/* Tabela com scroll horizontal */}
       <div className="overflow-x-auto border rounded-lg">
         <table className="min-w-[1100px] w-full border-collapse text-left text-sm">
-          <thead className="bg-yellow-50">
+          <thead className="bg-accent/10">
             <tr>
               <th className="px-4 py-2 border w-16">ID</th>
               <th className="px-4 py-2 border w-48">Nome</th>
@@ -139,16 +139,16 @@ const FuncionariosList = () => {
               <th className="px-4 py-2 border w-24 text-center">Ações</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-primary/10">
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={9} className="px-4 py-6 text-center text-gray-500">
+                <td colSpan={9} className="px-4 py-6 text-center text-primary/60">
                   Nenhum funcionário encontrado
                 </td>
               </tr>
             ) : (
               filtered.map(f => (
-                <tr key={f.id} className="hover:bg-yellow-50">
+                <tr key={f.id} className="hover:bg-accent/10">
                   <td className="px-4 py-2">{f.usuario}</td>
                   <td className="px-4 py-2">{f.nome}</td>
                   <td className="px-4 py-2">{f.papel}</td>
@@ -158,10 +158,10 @@ const FuncionariosList = () => {
                   <td className="px-4 py-2">{f.email}</td>
                   <td className="px-4 py-2">{f.ativo ? 'Sim' : 'Não'}</td>
                   <td className="px-4 py-2 flex justify-center gap-2">
-                    <button onClick={() => handleEdit(f)} className="text-blue-600 hover:text-blue-800">
+                    <button onClick={() => handleEdit(f)} className="text-secondary hover:text-secondary/80">
                       <Edit size={16} />
                     </button>
-                    <button onClick={() => handleDelete(f.id)} className="text-red-600 hover:text-red-800">
+                    <button onClick={() => handleDelete(f.id)} className="text-primary hover:text-primary/80">
                       <Trash2 size={16} />
                     </button>
                   </td>

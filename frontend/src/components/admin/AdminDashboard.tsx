@@ -90,18 +90,22 @@ const AdminDashboard = () => {
   });
 
   return (
-    <div className="space-y-6 p-4">
+    <div className="space-y-6">
       {/* Cabeçalho */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-800">
-          Painel do Administrador
-        </h2>
+      <div className="card">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-semibold text-text-primary">
+              Painel do Administrador
+            </h2>
+            <p className="text-sm text-neutral-gray mt-1">Gerencie classes, disciplinas e professores</p>
+          </div>
 
-        {/* Botão Definições */}
-        <div className="relative">
+          {/* Botão Definições */}
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-lg hover:bg-gray-200 transition"
+            className="btn-secondary flex items-center gap-2"
+            aria-label="Definições"
           >
             <Settings size={18} /> Definições
           </button>
@@ -109,116 +113,129 @@ const AdminDashboard = () => {
       </div>
 
       {/* Filtros */}
-      <div className="flex flex-wrap items-center gap-3 mt-4">
-        <button
-          onClick={() => setShowClasseForm(true)}
-          className="px-4 py-1 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition flex items-center gap-1"
-        >
-          <Plus size={16} /> Classe
-        </button>
-
-        <button
-          onClick={() => setShowDisciplinaForm(true)}
-          className="px-4 py-1 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition flex items-center gap-1"
-        >
-          <Plus size={16} /> Disciplina
-        </button>
-
-        <div className="flex items-center gap-2 ml-2">
-          <label className="text-sm font-bold">Ano:</label>
-          <select
-            value={selectedYear || ''}
-            onChange={(e) => setSelectedYear(Number(e.target.value))}
-            className="px-2 py-1 border rounded w-24"
+      <div className="card">
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={() => setShowClasseForm(true)}
+            className="btn-primary flex items-center gap-2"
+            aria-label="Adicionar classe"
           >
-            <option value="" disabled>Selecionar</option>
-            {Array.from({ length: 8 }, (_, i) => 2023 + i).map((y) => (
-              <option key={y} value={y}>{y}</option>
-            ))}
-          </select>
-        </div>
+            <Plus size={16} /> Nova Classe
+          </button>
 
-        <div className="flex items-center gap-2">
-          <label className="text-sm font-bold">Classe:</label>
-          <select
-            value={selectedClass}
-            onChange={(e) => setSelectedClass(e.target.value)}
-            className="px-2 py-1 border rounded w-32"
+          <button
+            onClick={() => setShowDisciplinaForm(true)}
+            className="btn-primary flex items-center gap-2"
+            aria-label="Adicionar disciplina"
           >
-            <option value="" disabled>Selecionar</option>
-            {[...new Set(allClasses.map((c) => c.nome_classe))].map((nome) => (
-              <option key={nome} value={nome}>{nome}</option>
-            ))}
-          </select>
-        </div>
+            <Plus size={16} /> Nova Disciplina
+          </button>
 
-        <div className="flex items-center gap-2">
-          <label className="text-sm font-bold">Pesquisar:</label>
-          <input
-            type="text"
-            placeholder="Disciplina/Professor"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="px-2 py-1 border rounded w-48"
-          />
+          <div className="flex items-center gap-2 ml-4">
+            <label className="text-sm font-medium text-text-primary">Ano:</label>
+            <select
+              value={selectedYear || ''}
+              onChange={(e) => setSelectedYear(Number(e.target.value))}
+              className="input-field w-28"
+              aria-label="Selecionar ano"
+            >
+              <option value="" disabled>Selecionar</option>
+              {Array.from({ length: 8 }, (_, i) => 2023 + i).map((y) => (
+                <option key={y} value={y}>{y}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium text-text-primary">Classe:</label>
+            <select
+              value={selectedClass}
+              onChange={(e) => setSelectedClass(e.target.value)}
+              className="input-field w-36"
+              aria-label="Selecionar classe"
+            >
+              <option value="" disabled>Selecionar</option>
+              {[...new Set(allClasses.map((c) => c.nome_classe))].map((nome) => (
+                <option key={nome} value={nome}>{nome}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium text-text-primary">Pesquisar:</label>
+            <input
+              type="text"
+              placeholder="Disciplina ou professor"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="input-field w-52"
+              aria-label="Pesquisar"
+            />
+          </div>
         </div>
       </div>
 
       {/* Tabela */}
       {selectedYear && selectedClass && (
-        <div className="overflow-x-auto mt-2">
-          <table className="min-w-full border border-gray-300 rounded-lg shadow-sm">
-            <thead className="bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-300 text-gray-900">
-              <tr className="text-center">
-                <th className="px-4 py-2 font-semibold text-sm border-r">Turma</th>
-                <th className="px-4 py-2 font-semibold text-sm border-r">Ano</th>
-                <th className="px-4 py-2 font-semibold text-sm border-r">Disciplina</th>
-                <th className="px-4 py-2 font-semibold text-sm border-r">Carga Horária</th>
-                <th className="px-4 py-2 font-semibold text-sm border-r">Professor</th>
-                <th className="px-4 py-2 font-semibold text-sm border-r">Contacto 1</th>
-                <th className="px-4 py-2 font-semibold text-sm border-r">Contacto 2</th>
-                <th className="px-4 py-2 font-semibold text-sm border-r">Contacto 3</th>
-                <th className="px-4 py-2 font-semibold text-sm">Ações</th>
-              </tr>
-            </thead>
-
-            <tbody className="divide-y divide-gray-200 bg-white text-center">
-              {filteredClasses.map((c) => (
-                <tr key={c.id_classes} className="hover:bg-yellow-50 transition">
-                  <td className="px-4 py-2">{c.nome_classe}</td>
-                  <td className="px-4 py-2">{c.ano_letivo}</td>
-                  <td className="px-4 py-2">{c.disciplina}</td>
-                  <td className="px-4 py-2">{c.carga_horaria}</td>
-                  <td className="px-4 py-2">{c.professor?.nome || '-'}</td>
-                  <td className="px-4 py-2">{c.professor?.contacto1 || '-'}</td>
-                  <td className="px-4 py-2">{c.professor?.contacto2 || '-'}</td>
-                  <td className="px-4 py-2">{c.professor?.contacto3 || '-'}</td>
-                  <td className="px-4 py-2 flex items-center justify-center gap-3">
-                    <button 
-                      onClick={() => handleEdit(c.id_classes)} 
-                      className="text-blue-600 hover:text-blue-800"
-                    >
-                      <Edit size={18} />
-                    </button>
-                    <button 
-                      onClick={() => handleDelete(c.id_classes)} 
-                      className="text-red-600 hover:text-red-800"
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-
-              {filteredClasses.length === 0 && (
+        <div className="card overflow-hidden p-0">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-border-light">
+              <thead className="table-header">
                 <tr>
-                  <td colSpan={9} className="text-center py-4 text-gray-500">
-                    Nenhum registro encontrado para os filtros selecionados.
-                  </td>
+                  <th className="px-4 py-3 text-left font-semibold text-sm">Turma</th>
+                  <th className="px-4 py-3 text-left font-semibold text-sm">Ano</th>
+                  <th className="px-4 py-3 text-left font-semibold text-sm">Disciplina</th>
+                  <th className="px-4 py-3 text-left font-semibold text-sm">Carga Horária</th>
+                  <th className="px-4 py-3 text-left font-semibold text-sm">Professor</th>
+                  <th className="px-4 py-3 text-left font-semibold text-sm">Contacto 1</th>
+                  <th className="px-4 py-3 text-left font-semibold text-sm">Contacto 2</th>
+                  <th className="px-4 py-3 text-left font-semibold text-sm">Contacto 3</th>
+                  <th className="px-4 py-3 text-center font-semibold text-sm">Ações</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody className="divide-y divide-border-light bg-white">
+                {filteredClasses.map((c) => (
+                  <tr key={c.id_classes} className="table-row">
+                    <td className="px-4 py-3 text-sm text-text-primary">{c.nome_classe}</td>
+                    <td className="px-4 py-3 text-sm text-text-primary">{c.ano_letivo}</td>
+                    <td className="px-4 py-3 text-sm text-text-primary">{c.disciplina}</td>
+                    <td className="px-4 py-3 text-sm text-text-secondary">{c.carga_horaria}h</td>
+                    <td className="px-4 py-3 text-sm text-text-primary">{c.professor?.nome || '-'}</td>
+                    <td className="px-4 py-3 text-sm text-neutral-gray">{c.professor?.contacto1 || '-'}</td>
+                    <td className="px-4 py-3 text-sm text-neutral-gray">{c.professor?.contacto2 || '-'}</td>
+                    <td className="px-4 py-3 text-sm text-neutral-gray">{c.professor?.contacto3 || '-'}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center justify-center gap-2">
+                        <button 
+                          onClick={() => handleEdit(c.id_classes)} 
+                          className="p-2 text-primary hover:bg-accent rounded-lg transition-all duration-150"
+                          aria-label="Editar"
+                        >
+                          <Edit size={16} />
+                        </button>
+                        <button 
+                          onClick={() => handleDelete(c.id_classes)} 
+                          className="p-2 text-error hover:bg-accent rounded-lg transition-all duration-150"
+                          aria-label="Excluir"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+
+                {filteredClasses.length === 0 && (
+                  <tr>
+                    <td colSpan={9} className="text-center py-8 text-neutral-gray">
+                      Nenhum registro encontrado para os filtros selecionados.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

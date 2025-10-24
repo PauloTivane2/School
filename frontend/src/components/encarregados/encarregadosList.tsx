@@ -74,24 +74,24 @@ const GuardiansView = () => {
       {/* Cabeçalho */}
       <div className="p-6 border-b flex flex-col md:flex-row md:items-center md:justify-between gap-5">
         <div className="flex items-center gap-12">
-          <h2 className="text-2xl font-bold text-gray-800">Gestão de Encarregados</h2>
-          <span className="text-gray-700 font-semibold bg-gray-100 px-3 py-1 rounded-md shadow-sm">
+          <h2 className="text-2xl font-bold text-primary">Gestão de Encarregados</h2>
+          <span className="text-primary/80 font-semibold bg-neutral-bg px-3 py-1 rounded-md shadow-sm">
             Total: {guardians.length}
           </span>
         </div>
 
         <div className="flex items-center gap-5">
-          <label className="text-gray-700 font-semibold text-sm">Pesquisar:</label>
+          <label className="text-primary/80 font-semibold text-sm">Pesquisar:</label>
           <input
             type="text"
             placeholder="nome ou aluno..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-1 text-sm w-40 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="border border-primary/20 rounded-md px-3 py-1 text-sm w-40 focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           <button
             onClick={handleAdd}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-1.5 rounded-md shadow-sm transition"
+            className="bg-secondary hover:bg-secondary/90 text-white font-semibold px-6 py-1.5 rounded-md shadow-sm transition"
           >
             + Adicionar
           </button>
@@ -101,48 +101,48 @@ const GuardiansView = () => {
       {/* Tabela */}
       <div className="overflow-x-auto">
         <table className="min-w-[1400px] w-full border-collapse">
-          <thead className="bg-gray-50">
+          <thead className="bg-neutral-bg/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase min-w-[160px]">Encarregado</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase">Contacto 1</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase">Contacto 2</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase">Contacto 3</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase">Morada</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase">Aluno</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase">Classe</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase">Turma</th>
-              <th className="px-6 py-3 text-center text-xs font-bold text-gray-700 uppercase">Ações</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-primary/80 uppercase min-w-[160px]">Encarregado</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-primary/80 uppercase">Contacto 1</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-primary/80 uppercase">Contacto 2</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-primary/80 uppercase">Contacto 3</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-primary/80 uppercase">Morada</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-primary/80 uppercase">Aluno</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-primary/80 uppercase">Classe</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-primary/80 uppercase">Turma</th>
+              <th className="px-6 py-3 text-center text-xs font-bold text-primary/80 uppercase">Ações</th>
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-primary/10">
             {filteredGuardians.length === 0 ? (
               <tr>
-                <td colSpan={9} className="px-6 py-8 text-center text-gray-500">
+                <td colSpan={9} className="px-6 py-8 text-center text-primary/60">
                   Nenhum encarregado encontrado
                 </td>
               </tr>
             ) : (
               filteredGuardians.map((g) => (
-                <tr key={g.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm text-gray-800">{g.nome}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{g.contacto1}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{g.contacto2}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{g.contacto3}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{g.morada}</td>
-                  <td className="px-6 py-4 text-sm text-gray-800">{g.aluno}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{g.classe}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{g.turma}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600 flex justify-center space-x-4">
+                <tr key={g.id} className="hover:bg-neutral-bg/50">
+                  <td className="px-6 py-4 text-sm text-primary">{g.nome}</td>
+                  <td className="px-6 py-4 text-sm text-primary/70">{g.contacto1}</td>
+                  <td className="px-6 py-4 text-sm text-primary/70">{g.contacto2}</td>
+                  <td className="px-6 py-4 text-sm text-primary/70">{g.contacto3}</td>
+                  <td className="px-6 py-4 text-sm text-primary/70">{g.morada}</td>
+                  <td className="px-6 py-4 text-sm text-primary">{g.aluno}</td>
+                  <td className="px-6 py-4 text-sm text-primary/70">{g.classe}</td>
+                  <td className="px-6 py-4 text-sm text-primary/70">{g.turma}</td>
+                  <td className="px-6 py-4 text-sm text-primary/70 flex justify-center space-x-4">
                     <button
                       onClick={() => handleEdit(g)}
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-secondary hover:text-secondary/80"
                     >
                       <Edit size={18} />
                     </button>
                     <button
                       onClick={() => handleDelete(g.id)}
-                      className="text-red-600 hover:text-red-800"
+                      className="text-primary hover:text-primary/80"
                     >
                       <Trash2 size={18} />
                     </button>

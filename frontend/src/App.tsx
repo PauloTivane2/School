@@ -31,9 +31,9 @@ class ErrorBoundary extends Component<{children: React.ReactNode}, {hasError: bo
     if (this.state.hasError) {
       return (
         <div className="p-6">
-          <h2 className="text-xl font-bold text-red-600">Erro na aplicação</h2>
-          <pre className="whitespace-pre-wrap mt-4 text-sm text-gray-700">{String(this.state.error)}</pre>
-          <p className="mt-4 text-sm text-gray-600">Verifica o console para mais detalhes.</p>
+          <h2 className="text-xl font-bold text-error">Erro na aplicação</h2>
+          <pre className="whitespace-pre-wrap mt-4 text-sm text-text-secondary">{String(this.state.error)}</pre>
+          <p className="mt-4 text-sm text-neutral-gray">Verifique o console para mais detalhes.</p>
         </div>
       );
     }
@@ -125,12 +125,16 @@ if (!user) {
 
   return (
     <ErrorBoundary>
-      <div className="flex h-screen bg-gray-100">
+      <div className="flex h-screen bg-neutral-light">
         {/* Sidebar */}
-        <div className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-blue-900 text-white transition-all duration-300 flex flex-col`}>
-          <div className="p-4 flex items-center justify-between border-b border-blue-800">
+        <div className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-primary text-white transition-all duration-300 flex flex-col shadow-lg`}>
+          <div className="p-4 flex items-center justify-between border-b border-primary-hover">
             {sidebarOpen && <h1 className="text-xl font-bold">SGE</h1>}
-            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-blue-800 rounded">
+            <button 
+              onClick={() => setSidebarOpen(!sidebarOpen)} 
+              className="p-2 hover:bg-primary-hover rounded transition-all duration-150"
+              aria-label={sidebarOpen ? 'Fechar menu' : 'Abrir menu'}
+            >
               {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
@@ -140,48 +144,53 @@ if (!user) {
               <button
                 key={item.id}
                 onClick={() => setCurrentView(item.id)}
-                className={`w-full flex items-center gap-3 p-3 rounded mb-2 transition ${currentView === item.id ? 'bg-blue-800' : 'hover:bg-blue-800'}`}
+                className={`w-full flex items-center gap-3 p-3 rounded-lg mb-2 transition-all duration-150 ${currentView === item.id ? 'bg-primary-hover' : 'hover:bg-primary-hover/80'}`}
+                aria-label={item.label}
               >
                 <item.icon size={20} />
-                {sidebarOpen && <span>{item.label}</span>}
+                {sidebarOpen && <span className="text-sm font-medium">{item.label}</span>}
               </button>
             ))}
           </nav>
 
-          <div className="p-4 border-t border-blue-800">
+          <div className="p-4 border-t border-primary-hover">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 p-3 hover:bg-blue-800 rounded transition"
+              className="w-full flex items-center gap-3 p-3 hover:bg-primary-hover rounded-lg transition-all duration-150"
+              aria-label="Sair"
             >
               <LogOut size={20} />
-              {sidebarOpen && <span>Sair</span>}
+              {sidebarOpen && <span className="text-sm font-medium">Sair</span>}
             </button>
           </div>
         </div>
 
         {/* Main Content */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          <header className="bg-white shadow-sm p-4">
-            <div className="flex items-center justify-between">
+          <header className="bg-white shadow-sm border-b border-border-light">
+            <div className="flex items-center justify-between px-6 py-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">{menuItems.find(item => item.id === currentView)?.label || 'Dashboard'}</h2>
-                <p className="text-sm text-gray-500">Sistema de Gestão Escolar</p>
+                <h2 className="text-2xl font-semibold text-text-primary">{menuItems.find(item => item.id === currentView)?.label || 'Dashboard'}</h2>
+                <p className="text-sm text-neutral-gray mt-1">Sistema de Gestão Escolar</p>
               </div>
               <div className="flex items-center gap-4">
-                <button className="relative p-2 hover:bg-gray-100 rounded-full transition">
-                  <Bell size={20} />
+                <button 
+                  className="relative p-2 hover:bg-accent rounded-lg transition-all duration-150"
+                  aria-label="Notificações"
+                >
+                  <Bell size={20} className="text-neutral-gray" />
                   {notifications > 0 && (
-                    <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 bg-error text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
                       {notifications}
                     </span>
                   )}
                 </button>
                 <div className="flex items-center gap-3">
                   <div className="text-right">
-                    <p className="font-semibold text-gray-800">{user.name}</p>
-                    <p className="text-xs text-gray-500">{user.role}</p>
+                    <p className="font-medium text-text-primary text-sm">{user.name}</p>
+                    <p className="text-xs text-neutral-gray">{user.role}</p>
                   </div>
-                  <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                  <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-semibold">
                     {user.name.charAt(0)}
                   </div>
                 </div>
@@ -189,8 +198,10 @@ if (!user) {
             </div>
           </header>
 
-          <main className="flex-1 overflow-y-auto p-6">
-            {renderView()}
+          <main className="flex-1 overflow-y-auto bg-neutral-light p-6">
+            <div className="max-w-7xl mx-auto">
+              {renderView()}
+            </div>
           </main>
         </div>
       </div>

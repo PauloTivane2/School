@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Save } from 'lucide-react';
-import './agenda.css';
 
 interface Agenda {
   id?: number;
@@ -63,13 +62,13 @@ const AgendaPage = () => {
     <div className="min-h-screen p-4 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <div className="max-w-[1800px] mx-auto space-y-4">
         <div className="bg-white rounded-2xl shadow-lg p-4 border-4 border-indigo-400 relative">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Gestão de Agendas</h2>
-          <p className="text-gray-500 text-sm">Criação, edição e acompanhamento de agendas</p>
+          <h2 className="text-2xl font-bold text-primary mb-2">Gestão de Agendas</h2>
+          <p className="text-primary/60 text-sm">Criação, edição e acompanhamento de agendas</p>
         </div>
 
         {/* Tipo de agenda */}
         <div className="bg-white rounded-2xl shadow-xl p-4 border-4 border-indigo-200 flex items-center gap-4">
-          <label className="font-bold text-gray-700">Tipo de Agenda:</label>
+          <label className="font-bold text-primary/80">Tipo de Agenda:</label>
           <select value={tipo} onChange={e => { setTipo(e.target.value); setForm(prev => ({ ...prev, tipo: e.target.value as 'Reuniao' | 'Avaliacao' })); }} className="border-2 border-indigo-300 rounded-md p-1">
             <option value="">Selecione...</option>
             <option value="Reuniao">Reunião</option>
@@ -105,8 +104,8 @@ const AgendaPage = () => {
             )}
 
             <div className="flex gap-2 mt-2">
-              <button onClick={() => setForm({ tipo: tipo as any, data: '', hora_inicio: '', duracao: 0, local: '', assunto: '', penalidades: '', ata: '', tolerancia: 0, requisitos: '', conteudos: '' })} disabled={!isFormChanged} className="bg-gray-300 px-4 py-1 rounded-md disabled:opacity-50">Limpar</button>
-              <button onClick={handleSubmit} disabled={!isFormChanged} className="bg-green-600 text-white px-4 py-1 rounded-md disabled:opacity-50 flex items-center gap-1"><Save size={14}/> Submeter</button>
+              <button onClick={() => setForm({ tipo: tipo as any, data: '', hora_inicio: '', duracao: 0, local: '', assunto: '', penalidades: '', ata: '', tolerancia: 0, requisitos: '', conteudos: '' })} disabled={!isFormChanged} className="bg-primary/10 px-4 py-1 rounded-md disabled:opacity-50">Limpar</button>
+              <button onClick={handleSubmit} disabled={!isFormChanged} className="bg-secondary text-white px-4 py-1 rounded-md disabled:opacity-50 flex items-center gap-1"><Save size={14}/> Submeter</button>
             </div>
           </div>
         )}
@@ -130,7 +129,7 @@ const AgendaPage = () => {
             </thead>
             <tbody>
               {agendas.map(a => (
-                <tr key={a.id} className="hover:bg-gray-50">
+                <tr key={a.id} className="hover:bg-neutral-bg/50">
                   <td>{a.id}</td>
                   <td>{a.tipo}</td>
                   <td>{a.data}</td>
@@ -141,8 +140,8 @@ const AgendaPage = () => {
                   <td>{a.penalidades}</td>
                   <td>{a.tipo==='Reuniao'?a.ata:a.requisitos}</td>
                   <td className="flex gap-1 justify-center">
-                    <button onClick={()=>alert('Editar ainda não implementado')} className="bg-blue-600 text-white px-2 py-0.5 rounded">Editar</button>
-                    <button onClick={()=>a.id && handleDelete(a.id)} className="bg-red-600 text-white px-2 py-0.5 rounded">Eliminar</button>
+                    <button onClick={()=>alert('Editar ainda não implementado')} className="bg-secondary text-white px-2 py-0.5 rounded">Editar</button>
+                    <button onClick={()=>a.id && handleDelete(a.id)} className="bg-primary text-white px-2 py-0.5 rounded">Eliminar</button>
                   </td>
                 </tr>
               ))}

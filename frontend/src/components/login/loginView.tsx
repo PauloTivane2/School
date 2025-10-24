@@ -20,70 +20,76 @@ export default function Login({ onLoginSuccess, onForgotPassword }: LoginProps) 
   };
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-yellow-100 to-orange-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-sm p-4 relative flex flex-col items-center">
-        {/* Título dentro da borda */}
-        <h2 className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-yellow-200 px-4 py-0.5 rounded-full text-lg font-bold text-yellow-700 shadow-inner">
-          Gestão Escolar
-        </h2>
-
-        {/* Círculo com ícone maior */}
-        <div className="w-24 h-24 rounded-full bg-yellow-200 flex items-center justify-center mt-10 mb-4 shadow-inner">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/29/29302.png"
-            alt="Livro"
-            className="w-16 h-16"
-          />
+    <div className="fixed inset-0 bg-accent flex items-center justify-center p-4">
+      <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-8 border border-border-light">
+        {/* Título */}
+        <div className="text-center mb-8">
+          <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center mx-auto mb-4">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/29/29302.png"
+              alt="Livro"
+              className="w-12 h-12 brightness-0 invert"
+            />
+          </div>
+          <h2 className="text-2xl font-semibold text-text-primary">
+            Sistema de Gestão Escolar
+          </h2>
+          <p className="text-sm text-neutral-gray mt-2">Faça login para continuar</p>
         </div>
 
         {/* Campos */}
-        <div className="w-full space-y-3 mt-2">
+        <div className="space-y-4">
           <div>
-            <label className="block mb-1 font-semibold text-gray-700">Username</label>
+            <label className="block mb-2 text-sm font-medium text-text-primary">Username</label>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Digite seu usuário"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+              className="input-field"
+              aria-label="Nome de usuário"
             />
           </div>
           <div>
-            <label className="block mb-1 font-semibold text-gray-700">Senha</label>
+            <label className="block mb-2 text-sm font-medium text-text-primary">Senha</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value.replace(/\D/g, ''))}
-              placeholder="min. 5 números"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+              placeholder="Mínimo 5 números"
+              className="input-field"
+              aria-label="Senha"
             />
           </div>
 
           {/* Botões */}
-          <div className="flex gap-3 mt-4">
+          <div className="flex gap-3 mt-6">
             <button
               onClick={() => window.close()}
-              className="flex-1 px-3 py-2 bg-red-400 hover:bg-red-500 text-white rounded-lg font-medium"
+              className="btn-secondary flex-1"
+              aria-label="Cancelar"
             >
               Cancelar
             </button>
             <button
               onClick={handleLogin}
-              className="flex-1 px-3 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg hover:from-yellow-600 hover:to-orange-600 font-medium"
+              className="btn-primary flex-1"
+              aria-label="Entrar"
             >
               Entrar
             </button>
           </div>
 
           {/* Recuperar senha */}
-          <p className="mt-3 text-sm text-gray-600 text-center">
-            Esqueceu-se da senha?{' '}
-            <span
+          <p className="mt-4 text-sm text-neutral-gray text-center">
+            Esqueceu a senha?{' '}
+            <button
               onClick={onForgotPassword}
-              className="text-yellow-700 cursor-pointer hover:underline font-medium"
+              className="text-primary hover:text-primary-hover font-medium transition-all duration-150 underline"
+              aria-label="Recuperar senha"
             >
-              Recupere aqui...
-            </span>
+              Clique aqui
+            </button>
           </p>
         </div>
       </div>

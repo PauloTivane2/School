@@ -67,7 +67,7 @@ const PaymentForm = ({ payment, onClose, onSuccess }: PaymentFormProps) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
       <div className="bg-white rounded-xl shadow-lg w-full max-w-md">
-        <div className="bg-green-600 text-white p-4 rounded-t-xl flex justify-between">
+        <div className="bg-secondary text-white p-4 rounded-t-xl flex justify-between">
           <h3 className="font-bold">
             {payment ? 'Editar Pagamento' : 'Novo Pagamento'}
           </h3>
@@ -125,7 +125,7 @@ const PaymentForm = ({ payment, onClose, onSuccess }: PaymentFormProps) => {
 
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-green-700 transition"
+            className="w-full bg-secondary text-white py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-green-700 transition"
           >
             <Save size={18} />
             Salvar

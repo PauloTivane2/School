@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Award, Save } from 'lucide-react';
-import './attendanceList.css';
 
 interface Aluno {
   id: number;
@@ -132,8 +131,8 @@ const AttendanceList = () => {
               <Award size={28} className="text-white" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-800">Controle de Presença</h2>
-              <p className="text-gray-500 text-sm">Registro diário de frequência</p>
+              <h2 className="text-2xl font-bold text-primary">Controle de Presença</h2>
+              <p className="text-primary/60 text-sm">Registro diário de frequência</p>
             </div>
           </div>
 
@@ -160,7 +159,7 @@ const AttendanceList = () => {
               { label: 'Trimestre *', field: 'trimestre', value: trimestre, options: ['1','2','3'] },
             ].map((f, i) => (
               <div key={i}>
-                <label className="block text-sm font-bold text-gray-800 mb-1">{f.label}</label>
+                <label className="block text-sm font-bold text-primary mb-1">{f.label}</label>
                 <select
                   value={f.value}
                   onChange={e => handleFilterChange(f.field, e.target.value)}
@@ -177,38 +176,38 @@ const AttendanceList = () => {
 
             {/* Presentes */}
             <div>
-              <label className="block text-sm font-bold text-gray-800 mb-1">Presentes</label>
+              <label className="block text-sm font-bold text-primary mb-1">Presentes</label>
               <div className="flex gap-1">
                 <input
                   type="text"
                   value={presentes.numero}
                   readOnly
-                  className="w-1/2 px-2 py-[6px] border-2 border-green-300 rounded-md bg-green-50 text-xs font-bold text-green-700 text-center"
+                  className="w-1/2 px-2 py-[6px] border-2 border-green-300 rounded-md bg-secondary/10 text-xs font-bold text-secondary/90 text-center"
                 />
                 <input
                   type="text"
                   value={`${presentes.percentagem.toFixed(1)}%`}
                   readOnly
-                  className="w-1/2 px-2 py-[4px] border-2 border-green-300 rounded-md bg-green-50 text-xs font-bold text-green-700 text-center"
+                  className="w-1/2 px-2 py-[4px] border-2 border-green-300 rounded-md bg-secondary/10 text-xs font-bold text-secondary/90 text-center"
                 />
               </div>
             </div>
 
             {/* Ausentes */}
             <div>
-              <label className="block text-sm font-bold text-gray-800 mb-1">Ausentes</label>
+              <label className="block text-sm font-bold text-primary mb-1">Ausentes</label>
               <div className="flex gap-1">
                 <input
                   type="text"
                   value={ausentes.numero}
                   readOnly
-                  className="w-1/2 px-2 py-[4px] border-2 border-red-300 rounded-md bg-red-50 text-xs font-bold text-red-700 text-center"
+                  className="w-1/2 px-2 py-[4px] border-2 border-red-300 rounded-md bg-red-50 text-xs font-bold text-primary/90 text-center"
                 />
                 <input
                   type="text"
                   value={`${ausentes.percentagem.toFixed(1)}%`}
                   readOnly
-                  className="w-1/2 px-2 py-[5px] border-2 border-red-300 rounded-md bg-red-50 text-xs font-bold text-red-700 text-center"
+                  className="w-1/2 px-2 py-[5px] border-2 border-red-300 rounded-md bg-red-50 text-xs font-bold text-primary/90 text-center"
                 />
               </div>
             </div>

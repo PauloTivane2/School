@@ -80,80 +80,93 @@ const ClassesList = () => {
   });
 
   return (
-    <div className="bg-white rounded-lg shadow-md">
+    <div className="space-y-6">
       {/* Cabeçalho */}
-      <div className="p-6 border-b flex flex-col md:flex-row md:items-center md:justify-between gap-5">
-        <div className="flex items-center gap-12">
-          <h2 className="text-2xl font-bold text-gray-800">Gestão de Classes</h2>
-          <span className="text-gray-700 font-semibold bg-gray-100 px-3 py-1 rounded-md shadow-sm">
-            Total: {classes.length}
-          </span>
-        </div>
-
-        <div className="flex items-center gap-5">
-          <label className="text-gray-700 font-semibold text-sm">Pesquisar:</label>
-          <input
-            type="text"
-            placeholder="Classe, turma, disciplina ou professor..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-1 text-sm w-56 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+      <div className="card">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-semibold text-text-primary">Gestão de Classes</h2>
+            <p className="text-sm text-neutral-gray mt-1">
+              Total de classes: <span className="font-medium text-text-primary">{classes.length}</span>
+            </p>
+          </div>
           <button
             onClick={handleAdd}
-            className="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-6 py-1.5 rounded-md shadow-sm transition"
+            className="btn-primary flex items-center gap-2"
+            aria-label="Adicionar classe"
           >
-            + Adicionar
+            + Nova Classe
           </button>
         </div>
       </div>
 
-      {/* Tabela */}
-      <div className="overflow-x-auto">
-        <table className="min-w-[900px] w-full border-collapse">
-          <thead className="bg-yellow-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase">Classe</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase">Turma</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase">Disciplina</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase">Professor</th>
-              <th className="px-6 py-3 text-center text-xs font-bold text-gray-700 uppercase">Ações</th>
-            </tr>
-          </thead>
+      {/* Filtros */}
+      <div className="card">
+        <div className="flex items-center gap-3">
+          <label className="text-sm font-medium text-text-primary">Pesquisar:</label>
+          <input
+            type="text"
+            placeholder="Turma, disciplina ou professor"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="input-field w-64"
+            aria-label="Pesquisar classe"
+          />
+        </div>
+      </div>
 
-          <tbody className="divide-y divide-gray-200">
-            {filteredClasses.length === 0 ? (
+      {/* Tabela */}
+      <div className="card overflow-hidden p-0">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-border-light">
+            <thead className="table-header">
               <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
-                  Nenhuma classe encontrada
-                </td>
+                <th className="px-4 py-3 text-left text-sm font-semibold">ID</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold">Turma</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold">Disciplina</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold">Professor</th>
+                <th className="px-4 py-3 text-center text-sm font-semibold">Ações</th>
               </tr>
-            ) : (
-              filteredClasses.map(cl => (
-                <tr key={cl.id} className="hover:bg-yellow-50">
-                  <td className="px-6 py-4 text-sm text-gray-800">{cl.id}</td>
-                  <td className="px-6 py-4 text-sm text-gray-800">{cl.turma.nome}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{cl.disciplina}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{cl.professor}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600 flex justify-center gap-4">
-                  <button
-                    onClick={() => handleEdit(cl)}
-                    className="text-blue-600 hover:text-blue-800"
-                  >
-                    <Edit size={18} />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(cl.id)}
-                    className="text-red-600 hover:text-red-800"
-                  >
-                    <Trash2 size={18} />
-                  </button>
+            </thead>
+
+            <tbody className="divide-y divide-border-light bg-white">
+              {filteredClasses.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="px-6 py-8 text-center text-neutral-gray">
+                    Nenhuma classe encontrada
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                filteredClasses.map(cl => (
+                  <tr key={cl.id} className="table-row">
+                    <td className="px-4 py-3 text-sm text-text-primary font-medium">{cl.id}</td>
+                    <td className="px-4 py-3 text-sm text-text-primary">{cl.turma.nome}</td>
+                    <td className="px-4 py-3 text-sm text-text-secondary">{cl.disciplina}</td>
+                    <td className="px-4 py-3 text-sm text-text-secondary">{cl.professor}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => handleEdit(cl)}
+                          className="p-2 text-primary hover:bg-accent rounded-lg transition-all duration-150"
+                          aria-label="Editar"
+                        >
+                          <Edit size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(cl.id)}
+                          className="p-2 text-error hover:bg-accent rounded-lg transition-all duration-150"
+                          aria-label="Excluir"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Modal */}

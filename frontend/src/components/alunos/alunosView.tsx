@@ -132,7 +132,7 @@ export default function StudentForm({ student, onClose, onSuccess }: StudentForm
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center z-50 p-4 overflow-auto">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl mt-10 mb-10">
-        <div className="bg-yellow-600 p-4 text-white rounded-t-2xl flex justify-between items-center">
+        <div className="bg-secondary p-4 text-white rounded-t-2xl flex justify-between items-center">
           <h3 className="text-lg font-bold">{student ? 'Editar Aluno' : '+ Aluno'}</h3>
           <button onClick={onClose}><X size={24} /></button>
         </div>
@@ -148,7 +148,7 @@ export default function StudentForm({ student, onClose, onSuccess }: StudentForm
                 value={nome}
                 onChange={handleNomeChange}
                 required
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
             </div>
             <div>
@@ -158,7 +158,7 @@ export default function StudentForm({ student, onClose, onSuccess }: StudentForm
                 value={dataNascimento}
                 onChange={e => setDataNascimento(e.target.value)}
                 required
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
             </div>
           </div>
@@ -171,7 +171,7 @@ export default function StudentForm({ student, onClose, onSuccess }: StudentForm
                 value={genero}
                 onChange={e => setGenero(e.target.value)}
                 required
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               >
                 <option value="" disabled>Selecione...</option>
                 <option value="M">Masculino</option>
@@ -186,7 +186,7 @@ export default function StudentForm({ student, onClose, onSuccess }: StudentForm
                 onChange={e => setBi(e.target.value.toUpperCase())}
                 required
                 maxLength={13}
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
             </div>
           </div>
@@ -201,7 +201,7 @@ export default function StudentForm({ student, onClose, onSuccess }: StudentForm
                 onChange={e => setNuit(e.target.value.replace(/\D/g,''))}
                 required
                 maxLength={9}
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
             </div>
             <div>
@@ -210,7 +210,7 @@ export default function StudentForm({ student, onClose, onSuccess }: StudentForm
                 value={classeId}
                 onChange={e => setClasseId(e.target.value)}
                 required
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               >
                 <option value="" disabled>Selecione...</option>
                 {classes.map(c => <option key={c.id_classes} value={c.id_classes}>{c.nome_classe}</option>)}
@@ -226,7 +226,7 @@ export default function StudentForm({ student, onClose, onSuccess }: StudentForm
                 value={turmaId}
                 onChange={e => setTurmaId(e.target.value)}
                 required
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               >
                 <option value="" disabled>Selecione...</option>
                 {turmas.map(t => <option key={t.id_turma} value={t.id_turma}>{t.turma}</option>)}
@@ -238,7 +238,7 @@ export default function StudentForm({ student, onClose, onSuccess }: StudentForm
                 value={encarregadoId}
                 onChange={e => setEncarregadoId(e.target.value)}
                 required
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               >
                 <option value="" disabled>Selecione...</option>
                 {encarregados.map(e => <option key={e.id_encarregados} value={e.id_encarregados}>{e.nome}</option>)}
@@ -249,7 +249,7 @@ export default function StudentForm({ student, onClose, onSuccess }: StudentForm
           {/* Botões */}
           <div className="flex justify-end gap-3 pt-4 border-t-2">
             <button type="button" onClick={handleClear} disabled={!canClear} className={`px-6 py-2 rounded-lg text-white transition ${canClear ? 'bg-rose-500 hover:bg-rose-600' : 'bg-gray-400 cursor-not-allowed'}`}>Limpar</button>
-            <button type="submit" disabled={saving} className="px-6 py-2 bg-gradient-to-r from-yellow-600 to-orange-600 text-white rounded-lg flex items-center gap-2 hover:from-yellow-700 hover:to-orange-700 disabled:opacity-50">
+            <button type="submit" disabled={saving} className="px-6 py-2 bg-gradient-to-r from-secondary/90 to-accent/90 text-white rounded-lg flex items-center gap-2 hover:from-yellow-700 hover:to-orange-700 disabled:opacity-50">
               {saving ? <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div> : <Save size={16} />}
               Salvar
             </button>

@@ -93,76 +93,83 @@ const PaymentsList = () => {
     .reduce((sum, p) => sum + toNumber(p.valor), 0);
 
   if (loading) {
-    return <div className="p-6 text-center text-gray-600">Carregando pagamentos...</div>;
+    return <div className="card text-center text-neutral-gray">Carregando pagamentos...</div>;
   }
 
   return (
     <div className="space-y-6">
       {/* Cards de resumo */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-green-600 p-6 rounded-xl shadow-lg text-white">
-          <p className="text-sm text-green-100">Total Recebido</p>
-          <p className="text-3xl font-bold mt-1">{totalPago.toFixed(2)} MT</p>
+        <div className="card border-l-4 border-success">
+          <p className="text-sm text-neutral-gray font-medium">Total Recebido</p>
+          <p className="text-2xl font-semibold text-text-primary mt-2">{totalPago.toFixed(2)} MT</p>
         </div>
-        <div className="bg-yellow-600 p-6 rounded-xl shadow-lg text-white">
-          <p className="text-sm text-yellow-100">Pendentes</p>
-          <p className="text-3xl font-bold mt-1">{totalPendente.toFixed(2)} MT</p>
+        <div className="card border-l-4 border-warning">
+          <p className="text-sm text-neutral-gray font-medium">Pendentes</p>
+          <p className="text-2xl font-semibold text-text-primary mt-2">{totalPendente.toFixed(2)} MT</p>
         </div>
-        <div className="bg-blue-600 p-6 rounded-xl shadow-lg text-white">
-          <p className="text-sm text-blue-100">Total Pagamentos</p>
-          <p className="text-3xl font-bold mt-1">{payments.length}</p>
+        <div className="card border-l-4 border-primary">
+          <p className="text-sm text-neutral-gray font-medium">Total Pagamentos</p>
+          <p className="text-2xl font-semibold text-text-primary mt-2">{payments.length}</p>
         </div>
       </div>
 
       {/* Cabeçalho */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-            <DollarSign size={28} className="text-green-600" />
-            Gestão de Pagamentos
-          </h2>
-          <p className="text-gray-500 mt-1">Gerir mensalidades e pagamentos</p>
+      <div className="card">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-accent rounded-lg flex items-center justify-center">
+              <DollarSign size={24} className="text-primary" />
+            </div>
+            <div>
+              <h2 className="text-xl font-semibold text-text-primary">Gestão de Pagamentos</h2>
+              <p className="text-sm text-neutral-gray mt-1">Gerir mensalidades e pagamentos</p>
+            </div>
+          </div>
+          <button
+            onClick={handleAdd}
+            className="btn-primary flex items-center gap-2"
+            aria-label="Registrar pagamento"
+          >
+            <Plus size={18} />
+            Novo Pagamento
+          </button>
         </div>
-        <button
-          onClick={handleAdd}
-          className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition flex items-center gap-2 shadow-md"
-        >
-          <Plus size={20} />
-          Registrar Pagamento
-        </button>
       </div>
 
       {/* Filtros */}
-      <div className="bg-white p-4 rounded-lg shadow-md">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-          <div className="relative">
-            <label className="block text-gray-600 font-medium mb-1">Pesquisar:</label>
+      <div className="card">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-text-primary mb-2">Pesquisar:</label>
             <div className="relative">
               <Search
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={20}
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-gray"
+                size={18}
               />
               <input
                 type="text"
-                placeholder="Por aluno, método, estado ou referência..."
+                placeholder="Aluno, método, estado ou referência"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="input-field pl-10"
+                aria-label="Pesquisar pagamento"
               />
             </div>
           </div>
 
-          <div className="relative">
-            <label className="block text-gray-600 font-medium mb-1">Filtrar por estado:</label>
+          <div>
+            <label className="block text-sm font-medium text-text-primary mb-2">Filtrar por estado:</label>
             <div className="relative">
               <Filter
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={20}
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-gray"
+                size={18}
               />
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="input-field pl-10"
+                aria-label="Filtrar por estado"
               >
                 <option value="all">Todos</option>
                 <option value="pago">Pagos</option>
@@ -175,68 +182,72 @@ const PaymentsList = () => {
       </div>
 
       {/* Tabela */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="card overflow-hidden p-0">
         <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-100">
+          <table className="min-w-full divide-y divide-border-light">
+            <thead className="table-header">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aluno</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Método</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Referência</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold">Aluno</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold">Valor</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold">Método</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold">Referência</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold">Data</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold">Estado</th>
+                <th className="px-4 py-3 text-center text-sm font-semibold">Ações</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-border-light bg-white">
               {filteredPayments.length > 0 ? (
                 filteredPayments.map((p) => (
-                  <tr key={p.id} className="hover:bg-gray-50 transition">
-                    <td className="px-6 py-4 text-sm">{p.aluno_nome}</td>
-                    <td className="px-6 py-4 text-sm font-bold">{toNumber(p.valor).toFixed(2)} MT</td>
-                    <td className="px-6 py-4 text-sm">{p.metodo}</td>
-                    <td className="px-6 py-4 text-sm">{p.referencia}</td>
-                    <td className="px-6 py-4 text-sm">
+                  <tr key={p.id} className="table-row">
+                    <td className="px-4 py-3 text-sm text-text-primary">{p.aluno_nome}</td>
+                    <td className="px-4 py-3 text-sm font-semibold text-text-primary">{toNumber(p.valor).toFixed(2)} MT</td>
+                    <td className="px-4 py-3 text-sm text-text-secondary">{p.metodo}</td>
+                    <td className="px-4 py-3 text-sm text-neutral-gray">{p.referencia}</td>
+                    <td className="px-4 py-3 text-sm text-text-secondary">
                       {p.data_pagamento ? new Date(p.data_pagamento).toLocaleDateString('pt-BR') : '-'}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3">
                       <span
-                        className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                        className={`px-2 py-1 text-xs font-medium rounded ${
                           p.estado === 'pago'
-                            ? 'bg-green-100 text-green-700'
+                            ? 'bg-green-100 text-success'
                             : p.estado === 'pendente'
-                            ? 'bg-yellow-100 text-yellow-700'
-                            : 'bg-red-100 text-red-700'
+                            ? 'bg-yellow-100 text-warning'
+                            : 'bg-red-100 text-error'
                         }`}
                       >
                         {p.estado}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm flex gap-3">
-                      <button
-                        onClick={() => handleEdit(p)}
-                        className={`flex items-center justify-center ${
-                          p.estado === 'pago'
-                            ? 'text-gray-400 cursor-not-allowed'
-                            : 'text-blue-600 hover:text-blue-800'
-                        }`}
-                        disabled={p.estado === 'pago'}
-                      >
-                        <Edit size={18} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(p.id)}
-                        className="text-red-600 hover:text-red-800"
-                      >
-                        <Trash2 size={18} />
-                      </button>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => handleEdit(p)}
+                          className={`p-2 rounded-lg transition-all duration-150 ${
+                            p.estado === 'pago'
+                              ? 'text-neutral-gray cursor-not-allowed'
+                              : 'text-primary hover:bg-accent'
+                          }`}
+                          disabled={p.estado === 'pago'}
+                          aria-label="Editar"
+                        >
+                          <Edit size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(p.id)}
+                          className="p-2 text-error hover:bg-accent rounded-lg transition-all duration-150"
+                          aria-label="Excluir"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={7} className="text-center text-gray-500 py-4">
+                  <td colSpan={7} className="text-center text-neutral-gray py-8">
                     Nenhum pagamento encontrado.
                   </td>
                 </tr>

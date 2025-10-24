@@ -120,7 +120,7 @@ export default function FuncionarioForm({ funcionario, onClose, onSuccess }: Fun
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-6 overflow-auto">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl transform transition-all duration-300 hover:scale-[1.01]">
-        <div className="bg-yellow-600 p-4 text-white rounded-t-2xl flex justify-between items-center">
+        <div className="bg-secondary p-4 text-white rounded-t-2xl flex justify-between items-center">
           <h3 className="text-lg font-bold">{funcionario ? 'Editar Funcionário' : 'Novo Funcionário'}</h3>
           <button onClick={onClose}><X size={24} /></button>
         </div>
@@ -136,7 +136,7 @@ export default function FuncionarioForm({ funcionario, onClose, onSuccess }: Fun
                 value={nome}
                 onChange={handleNomeChange}
                 required
-                className="w-full p-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full p-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
             </div>
             <div>
@@ -147,7 +147,7 @@ export default function FuncionarioForm({ funcionario, onClose, onSuccess }: Fun
                 onChange={e => setBI(e.target.value.toUpperCase())}
                 maxLength={13}
                 required
-                className="w-full p-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full p-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
             </div>
           </div>
@@ -162,7 +162,7 @@ export default function FuncionarioForm({ funcionario, onClose, onSuccess }: Fun
                 onChange={e => setNuit(e.target.value.replace(/\D/g, ''))}
                 maxLength={9}
                 required
-                className="w-full p-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full p-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
             </div>
             <div>
@@ -171,7 +171,7 @@ export default function FuncionarioForm({ funcionario, onClose, onSuccess }: Fun
                 value={nivelAcademico}
                 onChange={e => setNivelAcademico(e.target.value)}
                 required
-                className="w-full p-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full p-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               >
                 <option value="" disabled>Selecione</option>
                 <option value="Tecnico Medio">Tecnico Medio</option>
@@ -190,7 +190,7 @@ export default function FuncionarioForm({ funcionario, onClose, onSuccess }: Fun
                 value={funcao}
                 onChange={e => setFuncao(e.target.value)}
                 required
-                className="w-full p-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full p-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               >
                 <option value="" disabled>Selecione</option>
                 <option value="Professor">Professor</option>
@@ -207,7 +207,7 @@ export default function FuncionarioForm({ funcionario, onClose, onSuccess }: Fun
                 onChange={e => setEmail(e.target.value)}
                 placeholder="exemplo@gmail.com"
                 required
-                className="w-full p-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full p-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
             </div>
           </div>
@@ -216,15 +216,15 @@ export default function FuncionarioForm({ funcionario, onClose, onSuccess }: Fun
           <div className="grid grid-cols-3 gap-4">
             <div>
               <label className="block font-semibold mb-1">Contacto 1 *</label>
-              <input type="text" value={contacto1} onChange={e => setContacto1(e.target.value.replace(/\D/g, ''))} maxLength={9} placeholder="Ex: 82xxxxxxx" required className="w-full p-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500" />
+              <input type="text" value={contacto1} onChange={e => setContacto1(e.target.value.replace(/\D/g, ''))} maxLength={9} placeholder="Ex: 82xxxxxxx" required className="w-full p-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500" />
             </div>
             <div>
               <label className="block font-semibold mb-1">Contacto 2</label>
-              <input type="text" value={contacto2} onChange={e => setContacto2(e.target.value.replace(/\D/g, ''))} maxLength={9} placeholder="Ex: 82xxxxxxx" className="w-full p-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500" />
+              <input type="text" value={contacto2} onChange={e => setContacto2(e.target.value.replace(/\D/g, ''))} maxLength={9} placeholder="Ex: 82xxxxxxx" className="w-full p-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500" />
             </div>
             <div>
               <label className="block font-semibold mb-1">Contacto 3</label>
-              <input type="text" value={contacto3} onChange={e => setContacto3(e.target.value.replace(/\D/g, ''))} maxLength={9} placeholder="Ex: 82xxxxxxx" className="w-full p-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500" />
+              <input type="text" value={contacto3} onChange={e => setContacto3(e.target.value.replace(/\D/g, ''))} maxLength={9} placeholder="Ex: 82xxxxxxx" className="w-full p-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500" />
             </div>
           </div>
 
@@ -232,11 +232,11 @@ export default function FuncionarioForm({ funcionario, onClose, onSuccess }: Fun
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block font-semibold mb-1">Senha *</label>
-              <input type="password" value={senha} onChange={e => setSenha(e.target.value.replace(/\D/g, ''))} required placeholder="Mínimo 5 dígitos" className="w-full p-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500" />
+              <input type="password" value={senha} onChange={e => setSenha(e.target.value.replace(/\D/g, ''))} required placeholder="Mínimo 5 dígitos" className="w-full p-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500" />
             </div>
             <div>
               <label className="block font-semibold mb-1">Confirmar Senha *</label>
-              <input type="password" value={confirmarSenha} onChange={e => setConfirmarSenha(e.target.value.replace(/\D/g, ''))} required placeholder="Repita a senha" className="w-full p-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500" />
+              <input type="password" value={confirmarSenha} onChange={e => setConfirmarSenha(e.target.value.replace(/\D/g, ''))} required placeholder="Repita a senha" className="w-full p-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500" />
             </div>
           </div>
 
@@ -258,7 +258,7 @@ export default function FuncionarioForm({ funcionario, onClose, onSuccess }: Fun
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2 bg-gradient-to-r from-yellow-600 to-orange-600 text-white rounded-lg flex items-center gap-2"
+              className="px-6 py-2 bg-gradient-to-r from-secondary/90 to-accent/90 text-white rounded-lg flex items-center gap-2"
             >
               {saving ? <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div> : <Save size={16} />}
               Cadastrar

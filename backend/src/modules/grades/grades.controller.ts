@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { GradesService } from './grades.service';
+import { ApiResponse } from '../../shared/utils/response.util';
+import { asyncHandler } from '../../middleware/error-handler.middleware';
 
 export class GradesController {
   private service: GradesService;
@@ -8,130 +10,52 @@ export class GradesController {
     this.service = new GradesService();
   }
 
-  // ==========================================================
-  // POST /api/grades → Lançar nova nota
-  // ==========================================================
-  async create(req: Request, res: Response): Promise<void> {
-    try {
-      const { aluno_id, disciplina_id, valor, trimestre, periodo } = req.body;
+  getAll = asyncHandler(async (req: Request, res: Response) => {
+    const { aluno_id, disciplina_id, trimestre } = req.query;
+    const filters = {
+      aluno_id: aluno_id ? Number(aluno_id) : undefined,
+      disciplina_id: disciplina_id ? Number(disciplina_id) : undefined,
+      trimestre: trimestre ? Number(trimestre) : undefined,
+    };
+    const grades = await this.service.findAll(filters);
+    return ApiResponse.success(res, grades, 'Notas listadas com sucesso');
+  });
 
-      if (!aluno_id || !disciplina_id || !valor || !trimestre) {
-        res.status(400).json({ error: 'Todos os campos obrigatórios devem ser preenchidos.' });
-        return;
-      }
-
-      const nota = await this.service.create({
-        aluno_id: Number(aluno_id),
-        disciplina_id: Number(disciplina_id),
-        valor: valor.toString(),
-        trimestre: Number(trimestre),
-        periodo: periodo || `${trimestre}º Trimestre`
-      });
-
-      res.status(201).json(nota);
-    } catch (error: any) {
-      console.error('Erro ao criar nota:', error.message);
-      res.status(400).json({ error: error.message });
+  findByStudent = asyncHandler(async (req: Request, res: Response) => {
+    const { aluno_id, trimestre } = req.query;
+    if (!aluno_id || !trimestre) {
+      return ApiResponse.badRequest(res, 'aluno_id e trimestre são obrigatórios');
     }
-  }
+    const notas = await this.service.findByStudent(Number(aluno_id), trimestre.toString());
+    return ApiResponse.success(res, notas);
+  });
 
-  // ==========================================================
-  // PUT /api/grades/:id → Atualizar nota existente
-  // ==========================================================
-  async update(req: Request, res: Response): Promise<void> {
-    try {
-      const { id } = req.params;
-      const { valor } = req.body;
+  create = asyncHandler(async (req: Request, res: Response) => {
+    const nota = await this.service.create(req.body);
+    return ApiResponse.created(res, nota, 'Nota lançada com sucesso');
+  });
 
-      if (!valor) {
-        res.status(400).json({ error: 'O campo valor é obrigatório.' });
-        return;
-      }
+  update = asyncHandler(async (req: Request, res: Response) => {
+    const nota = await this.service.update(Number(req.params.id), req.body);
+    return ApiResponse.success(res, nota, 'Nota atualizada com sucesso');
+  });
 
-      const nota = await this.service.update(id, valor);
-
-      if (!nota) {
-        res.status(404).json({ error: 'Nota não encontrada.' });
-        return;
-      }
-
-      res.status(200).json(nota);
-    } catch (error: any) {
-      console.error('Erro ao atualizar nota:', error.message);
-      res.status(400).json({ error: error.message });
+  getBoletim = asyncHandler(async (req: Request, res: Response) => {
+    const { aluno_id, trimestre } = req.query;
+    if (!aluno_id || !trimestre) {
+      return ApiResponse.badRequest(res, 'aluno_id e trimestre são obrigatórios');
     }
-  }
+    const boletim = await this.service.getBoletim(Number(aluno_id), Number(trimestre));
+    return ApiResponse.success(res, boletim, 'Boletim gerado com sucesso');
+  });
 
-  // ==========================================================
-  // GET /api/grades/student?aluno_id=1&trimestre=2
-  // ==========================================================
-  async findByStudent(req: Request, res: Response): Promise<void> {
-    try {
-      const { aluno_id, trimestre } = req.query;
+  getStudentsByTurma = asyncHandler(async (req: Request, res: Response) => {
+    const alunos = await this.service.getStudentsByTurma(Number(req.params.turmaId));
+    return ApiResponse.success(res, alunos);
+  });
 
-      if (!aluno_id || !trimestre) {
-        res.status(400).json({ error: 'Parâmetros aluno_id e trimestre são obrigatórios.' });
-        return;
-      }
-
-      const notas = await this.service.findByStudent(Number(aluno_id), trimestre.toString());
-      res.status(200).json(notas);
-    } catch (error: any) {
-      console.error('Erro ao buscar notas do aluno:', error.message);
-      res.status(400).json({ error: error.message });
-    }
-  }
-
-  // ==========================================================
-  // GET /api/grades/boletim?aluno_id=1&trimestre=2
-  // ==========================================================
-  async getBoletim(req: Request, res: Response): Promise<void> {
-    try {
-      const { aluno_id, trimestre } = req.query;
-
-      if (!aluno_id || !trimestre) {
-        res.status(400).json({ error: 'Parâmetros aluno_id e trimestre são obrigatórios.' });
-        return;
-      }
-
-      const boletim = await this.service.getBoletim(Number(aluno_id), Number(trimestre));
-      res.status(200).json(boletim);
-    } catch (error: any) {
-      console.error('Erro ao gerar boletim:', error.message);
-      res.status(400).json({ error: error.message });
-    }
-  }
-
-  // ==========================================================
-  // GET /api/grades/students/:turmaId → alunos da turma
-  // ==========================================================
-  async getStudentsByTurma(req: Request, res: Response): Promise<void> {
-    try {
-      const { turmaId } = req.params;
-
-      if (!turmaId) {
-        res.status(400).json({ error: 'O parâmetro turmaId é obrigatório.' });
-        return;
-      }
-
-      const alunos = await this.service.getStudentsByTurma(Number(turmaId));
-      res.status(200).json(alunos);
-    } catch (error: any) {
-      console.error('Erro ao buscar alunos da turma:', error.message);
-      res.status(400).json({ error: error.message });
-    }
-  }
-
-  // ==========================================================
-  // GET /api/grades/disciplinas → todas as disciplinas
-  // ==========================================================
-  async getDisciplinas(_req: Request, res: Response): Promise<void> {
-    try {
-      const disciplinas = await this.service.getDisciplinas();
-      res.status(200).json(disciplinas);
-    } catch (error: any) {
-      console.error('Erro ao buscar disciplinas:', error.message);
-      res.status(400).json({ error: error.message });
-    }
-  }
+  getDisciplinas = asyncHandler(async (_req: Request, res: Response) => {
+    const disciplinas = await this.service.getDisciplinas();
+    return ApiResponse.success(res, disciplinas, 'Disciplinas listadas com sucesso');
+  });
 }

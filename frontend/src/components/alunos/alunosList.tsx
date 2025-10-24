@@ -154,111 +154,153 @@ const StudentsList = () => {
   const anos = Array.from({ length: 8 }, (_, i) => 2023 + i);
 
   return (
-    <div className="bg-white rounded-lg shadow-md">
-      {/* Header + Filtros */}
-      <div className="p-4 border-b flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3 flex-wrap">
-          <h2 className="text-2xl font-bold text-gray-800">Gestão de Alunos</h2>
-          <span className="text-gray-700 font-semibold bg-gray-100 px-3 py-1 rounded-md shadow-sm">
-            Total: {students.length}
-          </span>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2 ml-auto justify-end">
-          <select
-            value={selectedYear}
-            onChange={handleYearChange}
-            className="border border-gray-300 rounded-md px-2 py-1 text-sm w-18 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            title="Ano"
-          >
-            <option value="" disabled>Ano</option>
-            {anos.map(a => <option key={a} value={String(a)}>{a}</option>)}
-          </select>
-
-          <button
-            onClick={handleSearch}
-            className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300 text-sm"
-          >
-            Pesquisar
-          </button>
-
-          <input
-            type="text"
-            placeholder="Pesquisar..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="border border-gray-300 rounded-md px-2 py-1 text-sm w-34 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-
-          <select
-            value={selectedTurma}
-            onChange={handleTurmaChange}
-            className="border border-gray-300 rounded-md px-2 py-1 text-sm w-31 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            title="Classe / Turma"
-          >
-            <option value="" disabled>Classe / Turma</option>
-            {turmas.map(t => (
-              <option key={t.id_turma} value={String(t.id_turma)}>
-                {t.classe_turma}
-              </option>
-            ))}
-          </select>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="card">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-semibold text-text-primary">Gestão de Alunos</h2>
+            <p className="text-sm text-neutral-gray mt-1">
+              Total de alunos: <span className="font-medium text-text-primary">{students.length}</span>
+            </p>
+          </div>
 
           <button
             onClick={handleAdd}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1.5 rounded-md shadow-sm flex items-center gap-1"
+            className="btn-primary flex items-center gap-2"
+            aria-label="Adicionar aluno"
           >
-            <Plus size={16} /> Classe
+            <Plus size={16} /> Novo Aluno
+          </button>
+        </div>
+      </div>
+
+      {/* Filtros */}
+      <div className="card">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium text-text-primary">Ano:</label>
+            <select
+              value={selectedYear}
+              onChange={handleYearChange}
+              className="input-field w-28"
+              aria-label="Selecionar ano"
+            >
+              <option value="" disabled>Selecionar</option>
+              {anos.map(a => <option key={a} value={String(a)}>{a}</option>)}
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium text-text-primary">Turma:</label>
+            <select
+              value={selectedTurma}
+              onChange={handleTurmaChange}
+              className="input-field w-44"
+              aria-label="Selecionar turma"
+              disabled={!selectedYear}
+            >
+              <option value="" disabled>Selecionar turma</option>
+              {turmas.map(t => (
+                <option key={t.id_turma} value={String(t.id_turma)}>
+                  {t.classe_turma}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium text-text-primary">Pesquisar:</label>
+            <input
+              type="text"
+              placeholder="Nome ou NUI"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="input-field w-52"
+              aria-label="Pesquisar aluno"
+            />
+          </div>
+
+          <button
+            onClick={handleSearch}
+            className="btn-secondary"
+            aria-label="Buscar"
+          >
+            Buscar
           </button>
         </div>
       </div>
 
       {/* Tabela */}
       {!selectedYear ? (
-        <div className="p-6 text-center text-gray-500">Selecione o Ano para ver a tabela de alunos.</div>
+        <div className="card text-center text-neutral-gray">
+          <p>Selecione o ano letivo para visualizar os alunos</p>
+        </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-[1000px] w-full border-collapse">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-2 text-left text-xs font-bold text-gray-700 uppercase">Usuário</th>
-                <th className="px-4 py-2 text-left text-xs font-bold text-gray-700 uppercase">Nome</th>
-                <th className="px-4 py-2 text-left text-xs font-bold text-gray-700 uppercase">NUI</th>
-                <th className="px-4 py-2 text-left text-xs font-bold text-gray-700 uppercase">Gênero</th>
-                <th className="px-4 py-2 text-left text-xs font-bold text-gray-700 uppercase">Classe</th>
-                <th className="px-4 py-2 text-left text-xs font-bold text-gray-700 uppercase">Turma</th>
-                <th className="px-4 py-2 text-left text-xs font-bold text-gray-700 uppercase">Encarregado</th>
-                <th className="px-4 py-2 text-left text-xs font-bold text-gray-700 uppercase">Status</th>
-                <th className="px-4 py-2 text-left text-xs font-bold text-gray-700 uppercase">Pagamento</th>
-                <th className="px-4 py-2 text-center text-xs font-bold text-gray-700 uppercase">Ações</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {loading ? (
-                <tr><td colSpan={10} className="px-4 py-6 text-center text-gray-500">Carregando...</td></tr>
-              ) : students.length === 0 ? (
-                <tr><td colSpan={10} className="px-4 py-6 text-center text-gray-500">Nenhum aluno encontrado</td></tr>
-              ) : (
-                students.map(s => (
-                  <tr key={s.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-2 text-sm text-gray-800">{s.usuario}</td>
-                    <td className="px-4 py-2 text-sm text-gray-800">{s.nome}</td>
-                    <td className="px-4 py-2 text-sm text-gray-600">{s.numero_identificacao}</td>
-                    <td className="px-4 py-2 text-sm text-gray-600">{s.genero}</td>
-                    <td className="px-4 py-2 text-sm text-gray-600">{s.classe_nome}</td>
-                    <td className="px-4 py-2 text-sm text-gray-600">{s.turma_nome}</td>
-                    <td className="px-4 py-2 text-sm text-gray-600">{s.encarregado_nome}</td>
-                    <td className="px-4 py-2 text-sm text-gray-600">{s.status}</td>
-                    <td className="px-4 py-2 text-sm text-gray-600">{s.pagamento}</td>
-                    <td className="px-4 py-2 text-sm text-gray-600 flex justify-center space-x-2">
-                      <button onClick={() => handleEdit(s)} className="text-blue-600 hover:text-blue-800"><Edit size={16} /></button>
-                      <button onClick={() => handleDelete(s.id)} className="text-red-600 hover:text-red-800"><Trash2 size={16} /></button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+        <div className="card overflow-hidden p-0">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-border-light">
+              <thead className="table-header">
+                <tr>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">Usuário</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">Nome</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">NUI</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">Gênero</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">Classe</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">Turma</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">Encarregado</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">Status</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">Pagamento</th>
+                  <th className="px-4 py-3 text-center text-sm font-semibold">Ações</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border-light bg-white">
+                {loading ? (
+                  <tr><td colSpan={10} className="px-4 py-8 text-center text-neutral-gray">Carregando...</td></tr>
+                ) : students.length === 0 ? (
+                  <tr><td colSpan={10} className="px-4 py-8 text-center text-neutral-gray">Nenhum aluno encontrado</td></tr>
+                ) : (
+                  students.map(s => (
+                    <tr key={s.id} className="table-row">
+                      <td className="px-4 py-3 text-sm text-text-primary font-medium">{s.usuario}</td>
+                      <td className="px-4 py-3 text-sm text-text-primary">{s.nome}</td>
+                      <td className="px-4 py-3 text-sm text-neutral-gray">{s.numero_identificacao}</td>
+                      <td className="px-4 py-3 text-sm text-text-secondary">{s.genero}</td>
+                      <td className="px-4 py-3 text-sm text-text-secondary">{s.classe_nome}</td>
+                      <td className="px-4 py-3 text-sm text-text-secondary">{s.turma_nome}</td>
+                      <td className="px-4 py-3 text-sm text-text-secondary">{s.encarregado_nome}</td>
+                      <td className="px-4 py-3 text-sm">
+                        <span className={`px-2 py-1 rounded text-xs font-medium ${
+                          s.status === 'ativo' ? 'bg-green-100 text-success' : 'bg-red-100 text-error'
+                        }`}>
+                          {s.status}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-text-secondary">{s.pagamento}</td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center justify-center gap-2">
+                          <button 
+                            onClick={() => handleEdit(s)} 
+                            className="p-2 text-primary hover:bg-accent rounded-lg transition-all duration-150"
+                            aria-label="Editar"
+                          >
+                            <Edit size={16} />
+                          </button>
+                          <button 
+                            onClick={() => handleDelete(s.id)} 
+                            className="p-2 text-error hover:bg-accent rounded-lg transition-all duration-150"
+                            aria-label="Excluir"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

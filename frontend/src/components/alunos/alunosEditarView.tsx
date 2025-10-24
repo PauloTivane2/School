@@ -105,7 +105,7 @@ export default function StudentEditForm({ student, onClose, onSuccess }: Student
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center z-50 p-4 overflow-auto">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl mt-10 mb-10">
         {/* Cabeçalho */}
-        <div className="bg-yellow-600 p-4 text-white rounded-t-2xl flex justify-between items-center">
+        <div className="bg-secondary p-4 text-white rounded-t-2xl flex justify-between items-center">
           <h3 className="text-lg font-bold">Editar Aluno</h3>
           <button onClick={onClose}><X size={24} /></button>
         </div>
@@ -118,7 +118,7 @@ export default function StudentEditForm({ student, onClose, onSuccess }: Student
               type="text"
               value={student.nome_aluno ?? student.nome}
               disabled
-              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed"
+              className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg bg-neutral-bg cursor-not-allowed"
             />
           </div>
 
@@ -129,7 +129,7 @@ export default function StudentEditForm({ student, onClose, onSuccess }: Student
                 type="text"
                 value={usuario}
                 onChange={(e) => setUsuario(e.target.value)} disabled 
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg cursor-not-allowed"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg cursor-not-allowed"
               />
             </div>
 
@@ -140,7 +140,7 @@ export default function StudentEditForm({ student, onClose, onSuccess }: Student
                 value={classeId}
                 onChange={(e) => setClasseId(e.target.value)}
                 required
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               >
                 <option value="" disabled>Selecione...</option>
                 {classes.map((c: any) => (
@@ -157,7 +157,7 @@ export default function StudentEditForm({ student, onClose, onSuccess }: Student
                 value={turmaId}
                 onChange={(e) => setTurmaId(e.target.value)}
                 required
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               >
                 <option value="" disabled>Selecione...</option>
                 {turmas.map((t: any) => (
@@ -175,7 +175,7 @@ export default function StudentEditForm({ student, onClose, onSuccess }: Student
               value={encarregadoId}
               onChange={(e) => setEncarregadoId(e.target.value)}
               required
-              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+              className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
             >
               <option value="" disabled>Selecione...</option>
               {encarregados.map((e: any) => (
@@ -196,7 +196,7 @@ export default function StudentEditForm({ student, onClose, onSuccess }: Student
                   value="ativo"
                   checked={estado === 'ativo'}
                   onChange={(e) => setEstado(e.target.value)}
-                  className="w-4 h-4 text-yellow-600 focus:ring-yellow-500"
+                  className="w-4 h-4 text-primary focus:ring-yellow-500"
                 />
                 Ativo
               </label>
@@ -207,7 +207,7 @@ export default function StudentEditForm({ student, onClose, onSuccess }: Student
                   value="inativo"
                   checked={estado === 'inativo'}
                   onChange={(e) => setEstado(e.target.value)}
-                  className="w-4 h-4 text-yellow-600 focus:ring-yellow-500"
+                  className="w-4 h-4 text-primary focus:ring-yellow-500"
                 />
                 Inativo
               </label>
@@ -229,7 +229,7 @@ export default function StudentEditForm({ student, onClose, onSuccess }: Student
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2 bg-gradient-to-r from-yellow-600 to-orange-600 text-white rounded-lg flex items-center gap-2 hover:from-yellow-700 hover:to-orange-700 disabled:opacity-50"
+              className="px-6 py-2 bg-gradient-to-r from-secondary/90 to-accent/90 text-white rounded-lg flex items-center gap-2 hover:from-yellow-700 hover:to-orange-700 disabled:opacity-50"
             >
               {saving ? (
                 <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>

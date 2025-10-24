@@ -132,7 +132,7 @@ export default function EncarregadoForm({ encarregado, onClose, onSuccess }: Enc
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-6 overflow-auto">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl transform transition-all duration-300 hover:scale-[1.01]">
         {/* Cabeçalho */}
-        <div className="bg-yellow-600 p-4 text-white rounded-t-2xl flex justify-between items-center">
+        <div className="bg-secondary p-4 text-white rounded-t-2xl flex justify-between items-center">
           <h3 className="text-lg font-bold">
             {encarregado ? 'Editar Encarregado' : 'Novo Encarregado'}
           </h3>
@@ -153,7 +153,7 @@ export default function EncarregadoForm({ encarregado, onClose, onSuccess }: Enc
                 value={nome}
                 onChange={handleNomeChange}
                 required
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
             </div>
             <div>
@@ -163,7 +163,7 @@ export default function EncarregadoForm({ encarregado, onClose, onSuccess }: Enc
                 value={morada}
                 onChange={handleMoradaChange}
                 required
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
             </div>
           </div>
@@ -178,7 +178,7 @@ export default function EncarregadoForm({ encarregado, onClose, onSuccess }: Enc
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="exemplo@gmail.com"
                 required
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
             </div>
             <div>
@@ -190,7 +190,7 @@ export default function EncarregadoForm({ encarregado, onClose, onSuccess }: Enc
                 maxLength={9}
                 required
                 placeholder="Ex: 84xxxxxxx"
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
             </div>
           </div>
@@ -205,7 +205,7 @@ export default function EncarregadoForm({ encarregado, onClose, onSuccess }: Enc
                 onChange={(e) => setContacto2(e.target.value.replace(/\D/g, ''))}
                 maxLength={9}
                 placeholder="Ex: 85xxxxxxx"
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
             </div>
             <div>
@@ -217,7 +217,7 @@ export default function EncarregadoForm({ encarregado, onClose, onSuccess }: Enc
                 maxLength={9}
                 required
                 placeholder="Ex: 86xxxxxxx"
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
             </div>
           </div>
@@ -233,7 +233,7 @@ export default function EncarregadoForm({ encarregado, onClose, onSuccess }: Enc
                 maxLength={10}
                 required
                 placeholder="Mínimo 5 números"
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
             </div>
             <div>
@@ -245,7 +245,7 @@ export default function EncarregadoForm({ encarregado, onClose, onSuccess }: Enc
                 maxLength={10}
                 required
                 placeholder="Repita a senha"
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
             </div>
           </div>
@@ -268,7 +268,7 @@ export default function EncarregadoForm({ encarregado, onClose, onSuccess }: Enc
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2 bg-gradient-to-r from-yellow-600 to-orange-600 text-white rounded-lg flex items-center gap-2 hover:from-yellow-700 hover:to-orange-700 disabled:opacity-50"
+              className="px-6 py-2 bg-gradient-to-r from-secondary/90 to-accent/90 text-white rounded-lg flex items-center gap-2 hover:from-yellow-700 hover:to-orange-700 disabled:opacity-50"
             >
               {saving ? (
                 <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>

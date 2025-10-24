@@ -89,7 +89,7 @@ const GradeForm = ({ turmaId, trimestre, onClose }: GradeFormProps) => {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white p-8 rounded-2xl shadow-2xl">
           <div className="animate-spin rounded-full h-12 w-12 border-4 border-yellow-500 border-t-transparent mx-auto"></div>
-          <p className="mt-4 text-gray-600 font-medium">Carregando...</p>
+          <p className="mt-4 text-primary/70 font-medium">Carregando...</p>
         </div>
       </div>
     );
@@ -98,7 +98,7 @@ const GradeForm = ({ turmaId, trimestre, onClose }: GradeFormProps) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl">
-        <div className="bg-gradient-to-r from-yellow-600 to-orange-600 p-6 text-white rounded-t-2xl">
+        <div className="bg-gradient-to-r from-secondary/90 to-accent/90 p-6 text-white rounded-t-2xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="bg-white bg-opacity-20 p-2 rounded-lg">
@@ -117,14 +117,14 @@ const GradeForm = ({ turmaId, trimestre, onClose }: GradeFormProps) => {
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-primary/80 mb-2">
               Aluno *
             </label>
             <select
               required
               value={selectedStudent}
               onChange={(e) => setSelectedStudent(e.target.value)}
-              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+              className="w-full px-4 py-3 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
             >
               <option value="">Selecione o aluno...</option>
               {students.map((student) => (
@@ -136,14 +136,14 @@ const GradeForm = ({ turmaId, trimestre, onClose }: GradeFormProps) => {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-primary/80 mb-2">
               Disciplina *
             </label>
             <select
               required
               value={selectedDisciplina}
               onChange={(e) => setSelectedDisciplina(e.target.value)}
-              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+              className="w-full px-4 py-3 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
             >
               <option value="">Selecione a disciplina...</option>
               {disciplinas.map((disc) => (
@@ -155,7 +155,7 @@ const GradeForm = ({ turmaId, trimestre, onClose }: GradeFormProps) => {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-primary/80 mb-2">
               Nota (0-20) *
             </label>
             <input
@@ -166,7 +166,7 @@ const GradeForm = ({ turmaId, trimestre, onClose }: GradeFormProps) => {
               required
               value={nota}
               onChange={(e) => setNota(e.target.value)}
-              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 text-2xl font-bold text-center"
+              className="w-full px-4 py-3 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500 text-2xl font-bold text-center"
               placeholder="0.0"
             />
           </div>
@@ -175,14 +175,14 @@ const GradeForm = ({ turmaId, trimestre, onClose }: GradeFormProps) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-3 border-2 border-gray-300 rounded-lg hover:bg-gray-50 font-semibold"
+              className="px-6 py-3 border-2 border-primary/20 rounded-lg hover:bg-neutral-bg/50 font-semibold"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="px-8 py-3 bg-gradient-to-r from-yellow-600 to-orange-600 text-white rounded-lg hover:from-yellow-700 hover:to-orange-700 disabled:opacity-50 font-semibold shadow-md flex items-center gap-2"
+              className="px-8 py-3 bg-gradient-to-r from-secondary/90 to-accent/90 text-white rounded-lg hover:from-yellow-700 hover:to-orange-700 disabled:opacity-50 font-semibold shadow-md flex items-center gap-2"
             >
               {saving ? (
                 <>

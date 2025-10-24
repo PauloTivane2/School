@@ -140,7 +140,7 @@ const ClasseForm = ({ classe, onClose, refresh }: ClasseFormProps) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center z-50 p-4 overflow-auto">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl mt-10 mb-10">
-        <div className="bg-yellow-600 p-4 text-white rounded-t-2xl flex justify-between items-center">
+        <div className="bg-secondary p-4 text-white rounded-t-2xl flex justify-between items-center">
           <h3 className="text-lg font-bold">{classe ? 'Editar Classe' : 'Nova Classe'}</h3>
           <button onClick={onClose}><X size={24} /></button>
         </div>
@@ -196,7 +196,7 @@ const ClasseForm = ({ classe, onClose, refresh }: ClasseFormProps) => {
               <button
                 type="button"
                 onClick={handleAddRelacao}
-                className="w-full bg-yellow-600 text-white rounded-lg py-2 flex justify-center items-center gap-2 hover:bg-yellow-700 transition"
+                className="w-full bg-secondary text-white rounded-lg py-2 flex justify-center items-center gap-2 hover:bg-secondary/90 transition"
               >
                 <PlusCircle size={18} /> Adicionar
               </button>
@@ -206,10 +206,10 @@ const ClasseForm = ({ classe, onClose, refresh }: ClasseFormProps) => {
           {/* Tabela Temporária */}
           {relacoesTemp.length > 0 && (
             <div className="mt-4 border-t pt-3 bg-red-50 rounded-lg p-3 transition-all duration-300">
-              <h4 className="font-semibold mb-3 text-gray-800">
-                Classe Selecionada: <span className="text-yellow-700">{selectedClasse}</span>
+              <h4 className="font-semibold mb-3 text-primary">
+                Classe Selecionada: <span className="text-primary">{selectedClasse}</span>
               </h4>
-              <table className="w-full border text-sm text-gray-800">
+              <table className="w-full border text-sm text-primary">
                 <thead className="bg-red-100">
                   <tr>
                     <th className="px-4 py-2 border text-center w-20">Ordem</th>
@@ -228,7 +228,7 @@ const ClasseForm = ({ classe, onClose, refresh }: ClasseFormProps) => {
                         <button
                           type="button"
                           onClick={() => handleRemoveRelacao(r.id)}
-                          className="text-red-600 hover:text-red-800 transition"
+                          className="text-primary hover:text-primary/80 transition"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -241,7 +241,7 @@ const ClasseForm = ({ classe, onClose, refresh }: ClasseFormProps) => {
                 <button
                   type="button"
                   onClick={handleClearAll}
-                  className="text-sm px-5 py-2 border border-red-400 rounded-lg bg-red-100 text-red-700 font-medium hover:bg-red-200 transition"
+                  className="text-sm px-5 py-2 border border-red-400 rounded-lg bg-red-100 text-primary/90 font-medium hover:bg-red-200 transition"
                 >
                   Limpar Tudo
                 </button>
@@ -254,7 +254,7 @@ const ClasseForm = ({ classe, onClose, refresh }: ClasseFormProps) => {
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2 bg-gradient-to-r from-yellow-600 to-orange-600 text-white rounded-lg flex items-center gap-2 hover:from-yellow-700 hover:to-orange-700 disabled:opacity-50"
+              className="px-6 py-2 bg-gradient-to-r from-secondary/90 to-accent/90 text-white rounded-lg flex items-center gap-2 hover:from-yellow-700 hover:to-orange-700 disabled:opacity-50"
             >
               {saving ? (
                 <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>

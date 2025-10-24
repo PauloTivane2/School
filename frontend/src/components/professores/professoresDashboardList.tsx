@@ -105,11 +105,11 @@ const ProfessorDashboard = () => {
     <div className="space-y-6 p-4">
       {/* Cabeçalho */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-800">Painel do Professor</h2>
+        <h2 className="text-2xl font-bold text-primary">Painel do Professor</h2>
         <div className="relative">
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-lg hover:bg-gray-200 transition"
+            className="flex items-center gap-2 bg-neutral-bg px-4 py-2 rounded-lg hover:bg-neutral-bg/80 transition"
           >
             <Settings size={18} /> Definições
           </button>
@@ -120,14 +120,14 @@ const ProfessorDashboard = () => {
       <div className="flex flex-wrap items-center gap-3 mt-4">
         <button
           onClick={() => setShowClasseForm(true)}
-          className="px-4 py-1 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition flex items-center gap-1"
+          className="px-4 py-1 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition flex items-center gap-1"
         >
           <Plus size={16} /> Classe
         </button>
 
         <button
           onClick={() => setShowDisciplinaForm(true)}
-          className="px-4 py-1 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition flex items-center gap-1"
+          className="px-4 py-1 bg-accent text-white rounded-lg hover:bg-accent/90 transition flex items-center gap-1"
         >
           <Plus size={16} /> Disciplina
         </button>
@@ -182,8 +182,8 @@ const ProfessorDashboard = () => {
 
       {/* Tabela */}
       <div className="overflow-x-auto mt-2">
-        <table className="min-w-full border border-gray-300 rounded-lg shadow-sm">
-          <thead className="bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-300 text-gray-900">
+        <table className="min-w-full border border-primary/20 rounded-lg shadow-sm">
+          <thead className="bg-gradient-to-r from-accent via-accent to-accent text-primary">
             <tr className="text-center">
               {!selectedYear && !selectedClass ? (
                 <>
@@ -208,9 +208,9 @@ const ProfessorDashboard = () => {
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-gray-200 bg-white text-center">
+          <tbody className="divide-y divide-primary/10 bg-white text-center">
             {!selectedYear && !selectedClass && professor ? (
-              <tr className="hover:bg-yellow-50 transition">
+              <tr className="hover:bg-accent/10 transition">
                 <td className="px-4 py-2">{professor.id}</td>
                 <td className="px-4 py-2">{professor.bi}</td>
                 <td className="px-4 py-2">{professor.nuit}</td>
@@ -220,7 +220,7 @@ const ProfessorDashboard = () => {
               </tr>
             ) : filteredAlunos.length > 0 ? (
               filteredAlunos.map((a) => (
-                <tr key={a.id_aluno} className="hover:bg-yellow-50 transition">
+                <tr key={a.id_aluno} className="hover:bg-accent/10 transition">
                   <td className="px-4 py-2">{a.nome_aluno}</td>
                   <td className="px-4 py-2">{a.bi}</td>
                   <td className="px-4 py-2">{a.nuit}</td>
@@ -230,13 +230,13 @@ const ProfessorDashboard = () => {
                   <td className="px-4 py-2 flex items-center justify-center gap-3">
                     <button
                       onClick={() => handleEdit(a.id_aluno)}
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-secondary hover:text-secondary/80"
                     >
                       <Edit size={18} />
                     </button>
                     <button
                       onClick={() => handleDelete(a.id_aluno)}
-                      className="text-red-600 hover:text-red-800"
+                      className="text-primary hover:text-primary/80"
                     >
                       <Trash2 size={18} />
                     </button>
@@ -245,7 +245,7 @@ const ProfessorDashboard = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={selectedYear && selectedClass ? 7 : 6} className="text-center py-4 text-gray-500">
+                <td colSpan={selectedYear && selectedClass ? 7 : 6} className="text-center py-4 text-primary/60">
                   Nenhum registro encontrado para os filtros selecionados.
                 </td>
               </tr>

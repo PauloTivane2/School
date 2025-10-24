@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Award, Save } from 'lucide-react';
-import './gradesList.css'; // mantém o CSS auxiliar
 
 interface Aluno {
   id: number;
@@ -133,8 +132,8 @@ const GradesList = () => {
               <Award size={28} className="text-white" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-800">Gestão de Notas</h2>
-              <p className="text-gray-500 text-sm">Lançamento e acompanhamento de avaliações</p>
+              <h2 className="text-2xl font-bold text-primary">Gestão de Notas</h2>
+              <p className="text-primary/60 text-sm">Lançamento e acompanhamento de avaliações</p>
             </div>
           </div>
 
@@ -167,7 +166,7 @@ const GradesList = () => {
               { label: 'Trimestre *', field: 'trimestre', value: trimestre, options: ['1','2','3'] },
             ].map((f, i) => (
               <div key={i}>
-                <label className="block text-sm font-bold text-gray-800 mb-1">{f.label}</label>
+                <label className="block text-sm font-bold text-primary mb-1">{f.label}</label>
                 <select
                   value={f.value}
                   onChange={e => handleFilterChange(f.field, e.target.value)}
@@ -183,22 +182,22 @@ const GradesList = () => {
             ))}
 
             <div>
-              <label className="block text-sm font-bold text-gray-800 mb-1">Exame</label>
+              <label className="block text-sm font-bold text-primary mb-1">Exame</label>
               <button
                 onClick={() => setExameSelecionado(!exameSelecionado)}
-                className={`w-full h-[30px] flex items-center justify-center rounded-md text-xs font-semibold transition ${exameSelecionado ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-600'}`}
+                className={`w-full h-[30px] flex items-center justify-center rounded-md text-xs font-semibold transition ${exameSelecionado ? 'bg-secondary/100 text-white' : 'bg-neutral-bg/80 text-primary/70'}`}
               >
                 {exameSelecionado ? 'Ativo' : 'Inativo'}
               </button>
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-gray-800 mb-1">Avaliação *</label>
+              <label className="block text-sm font-bold text-primary mb-1">Avaliação *</label>
               <select
                 value={avaliacao}
                 onChange={e => setAvaliacao(e.target.value)}
                 disabled={!showTable}
-                className="w-full px-2 py-[6px] border-2 border-indigo-300 rounded-md bg-white text-xs font-medium disabled:bg-gray-100"
+                className="w-full px-2 py-[6px] border-2 border-indigo-300 rounded-md bg-white text-xs font-medium disabled:bg-neutral-bg"
               >
                 <option value="">Selecione...</option>
                 <option value="teste1">Teste 1</option>
@@ -234,7 +233,7 @@ const GradesList = () => {
             {/* Container com scroll apenas para a tabela */}
             <div className="overflow-x-auto">
                     <table className="min-w-[1200px] w-full text-xs">
-                      <thead className="bg-gray-50 border-b-2 border-indigo-200 text-[11px]">
+                      <thead className="bg-neutral-bg/50 border-b-2 border-indigo-200 text-[11px]">
                         <tr>
                           <th className="px-3 py-1 text-left">Usuário</th>
                           <th className="px-3 py-1 text-left w-64">Aluno</th>
@@ -244,9 +243,9 @@ const GradesList = () => {
                         </tr>
                       </thead>
 
-                      <tbody className="divide-y divide-gray-200">
+                      <tbody className="divide-y divide-primary/10">
                         {alunos.map(a=>(
-                          <tr key={a.id} className="hover:bg-gray-50">
+                          <tr key={a.id} className="hover:bg-neutral-bg/50">
                             <td className="px-3 py-1 text-center font-medium">{a.usuario}</td>
                             <td className="px-3 py-1 font-semibold">{a.nome}</td>
 
@@ -262,17 +261,17 @@ const GradesList = () => {
                                     onChange={e=>handleNotaChange(a.id,c,e.target.value)}
                                     disabled={!isFieldEnabled(c)}
                                     className={`w-12 px-1 py-0.5 text-center rounded text-[11px] focus:outline-none focus:ring-1 ${
-                                      isFieldEnabled(c) ? 'border border-transparent bg-white' : 'bg-gray-100 border border-transparent'
+                                      isFieldEnabled(c) ? 'border border-transparent bg-white' : 'bg-neutral-bg border border-transparent'
                                     } ${
                                       (a as any)[c] !== null
                                         ? ((a as any)[c] ?? 0) >= 10
                                           ? 'text-indigo-700 font-semibold'
-                                          : 'text-red-600 font-semibold'
+                                          : 'text-primary font-semibold'
                                         : 'text-gray-400'
                                     } ${erros[`${a.id}_${c}`] ? 'border-red-500' : ''}`}
                                   />
                                   {erros[`${a.id}_${c}`] && (
-                                    <div className="absolute left-1/2 -translate-x-1/2 -top-5 text-[11px] text-red-700 bg-red-50 px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
+                                    <div className="absolute left-1/2 -translate-x-1/2 -top-5 text-[11px] text-primary/90 bg-red-50 px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
                                       {erros[`${a.id}_${c}`]}
                                     </div>
                                   )}
@@ -282,7 +281,7 @@ const GradesList = () => {
 
                             {/* Nota de Frequência */}
                             <td className={`px-3 py-1 text-center font-bold ${
-                              (a.notaFrequencia ?? 0) >= 10 ? 'text-indigo-700' : 'text-red-600'
+                              (a.notaFrequencia ?? 0) >= 10 ? 'text-indigo-700' : 'text-primary'
                             }`}>
                               {a.notaFrequencia !== null && !isNaN(a.notaFrequencia) ? a.notaFrequencia.toFixed(1) : '-'}
                             </td>
@@ -292,7 +291,7 @@ const GradesList = () => {
                               <div
                                 className={`text-[11px] font-semibold ${
                                   a.resultadoFrequencia === 'Excluído' || a.resultadoFrequencia === 'Reprovado'
-                                    ? 'text-red-600'
+                                    ? 'text-primary'
                                     : 'text-indigo-700'
                                 }`}
                               >
@@ -309,13 +308,13 @@ const GradesList = () => {
                                 onChange={e=>handleNotaChange(a.id,'exame',e.target.value)}
                                 disabled={!isFieldEnabled('exame', a)}
                                 className={`w-12 px-1 py-0.5 text-center rounded text-[11px] focus:outline-none ${
-                                  (a.exame ?? 0) >= 10 ? 'text-indigo-700 font-semibold' : 'text-red-600 font-semibold'
-                                } ${isFieldEnabled('exame', a) ? 'border border-transparent bg-white' : 'bg-gray-100 border border-transparent'} ${
+                                  (a.exame ?? 0) >= 10 ? 'text-indigo-700 font-semibold' : 'text-primary font-semibold'
+                                } ${isFieldEnabled('exame', a) ? 'border border-transparent bg-white' : 'bg-neutral-bg border border-transparent'} ${
                                   erros[`${a.id}_exame`] ? 'border-red-500' : ''
                                 }`}
                               />
                               {erros[`${a.id}_exame`] && (
-                                <div className="absolute left-1/2 -translate-x-1/2 -top-5 text-[11px] text-red-700 bg-red-50 px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
+                                <div className="absolute left-1/2 -translate-x-1/2 -top-5 text-[11px] text-primary/90 bg-red-50 px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
                                   {erros[`${a.id}_exame`]}
                                 </div>
                               )}
@@ -323,7 +322,7 @@ const GradesList = () => {
 
                             {/* Média */}
                             <td className={`px-3 py-1 text-center font-bold ${
-                              (a.mediaFinal ?? 0) >= 10 ? 'text-indigo-700' : 'text-red-600'
+                              (a.mediaFinal ?? 0) >= 10 ? 'text-indigo-700' : 'text-primary'
                             }`}>
                               {a.mediaFinal !== null && !isNaN(a.mediaFinal) ? a.mediaFinal.toFixed(1) : '-'}
                             </td>
@@ -332,7 +331,7 @@ const GradesList = () => {
                             <td className="px-3 py-1 text-center">
                               <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
                                 a.resultadoFinal === 'Reprovado'
-                                  ? 'bg-red-200 text-red-800'
+                                  ? 'bg-red-200 text-primary/80'
                                   : 'bg-green-200 text-green-800'
                               }`}>
                                 {a.resultadoFinal}
