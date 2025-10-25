@@ -1,31 +1,54 @@
-# docker-compose.yml
+# ====================================
+# Docker Compose - Sistema de Gestão Escolar
+# ====================================
 version: '3.8'
+
 services:
+  # Banco de dados PostgreSQL
   db:
-    image: postgres:latest
+    image: postgres:15-alpine
+    container_name: sge_database
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: seu_usuario
-      POSTGRES_PASSWORD: sua_senha
-      POSTGRES_DB: school_management
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: sua_senha_aqui
+      POSTGRES_DB: sge_db
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-  backend:
-    build: ./backend
+    networks:
+      - sge_network
+
+  # Backend API
+  server:
+    build: ./server
+    container_name: sge_server
+    restart: unless-stopped
     ports:
       - "3000:3000"
     depends_on:
       - db
     environment:
-      - DB_HOST=db
-      - DB_USER=seu_usuario
-      - DB_NAME=school_management
-      - DB_PASSWORD=sua_senha
-      - DB_PORT=5432
       - NODE_ENV=development
-      - CORS_ORIGIN=http://localhost:3000
       - PORT=3000
-      - JWT_SECRET=sua_chave_secreta_aqui
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=sua_senha_aqui
+      - DB_NAME=sge_db
+      - JWT_SECRET=sua_chave_secreta_super_segura_aqui
+      - JWT_EXPIRES_IN=7d
+      - FRONTEND_URL=http://localhost:5173
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    networks:
+      - sge_network
+
 volumes:
   pgdata:
+
+networks:
+  sge_network:
+    driver: bridge

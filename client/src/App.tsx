@@ -2,17 +2,19 @@ import React, { useState, Component } from 'react';
 import { Users, DollarSign, Menu, Calendar, X, Home, UserCheck, Award, Settings, LogOut, UserCog, BookOpen, TrendingUp, Bell } from 'lucide-react';
 
 // Componentes
-import GuardiansView from './components/encarregados/encarregadosList';
-import AttendanceList from './components/presencas/presencasList';
-import GradesList from './components/notas/notasList';
-import TurmasList from './components/turmas/turmasList';
-import FuncionariosList from './components/funcionarios/funcionariosList';
-import StudentsView from './components/alunos/alunosList';
-import PaymentsList from './components/pagamentos/pagamentosList';
-import AdminDashboard from './components/admin/AdminDashboard';
-import ProfessoresDashboardList from './components/professores/professoresDashboardList';
-import Login from './components/login/loginView';
-import AgendaPage from './components/agendas/agendaList';  
+import GuardiansView from './components/encarregadosList';
+import AttendanceList from './components/presencasList';
+import GradesList from './components/notasList';
+import TurmasList from './components/turmasList';
+import FuncionariosList from './components/funcionariosList';
+import StudentsView from './components/alunosList';
+import PaymentsList from './components/pagamentosList';
+import AgendaPage from './components/agendaList';
+
+// Pages
+import AdminDashboard from './pages/AdminDashboard';
+import ProfessoresDashboardList from './pages/professoresDashboardList';
+import Login from './pages/loginView';  
 
 
 // ErrorBoundary

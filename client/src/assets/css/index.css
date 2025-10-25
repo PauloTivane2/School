@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    * {
+        @apply m-0 p-0 box-border;
+    }
+
+    body {
+        @apply font-sans antialiased bg-neutral-light text-text-primary;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-semibold text-text-primary;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+        @apply outline-none ring-2 ring-primary ring-opacity-40;
+    }
+}
+
+@layer components {
+    /* ========== BOTÕES ========== */
+    .btn-primary {
+        @apply bg-primary text-white px-4 py-2 rounded-lg font-medium transition-all duration-150 hover:bg-primary-hover focus:ring-2 focus:ring-primary focus:ring-opacity-40 disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .btn-secondary {
+        @apply bg-secondary text-white px-4 py-2 rounded-lg font-medium transition-all duration-150 hover:bg-secondary-hover focus:ring-2 focus:ring-secondary focus:ring-opacity-40 disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .btn-success {
+        @apply bg-success text-white px-4 py-2 rounded-lg font-medium transition-all duration-150 hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .btn-warning {
+        @apply bg-warning text-white px-4 py-2 rounded-lg font-medium transition-all duration-150 hover:bg-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .btn-danger {
+        @apply bg-error text-white px-4 py-2 rounded-lg font-medium transition-all duration-150 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .btn-disabled {
+        @apply bg-neutral-gray text-white px-4 py-2 rounded-lg font-medium cursor-not-allowed opacity-50;
+    }
+
+    .btn-cancel {
+        @apply bg-accent text-text-secondary px-4 py-2 rounded-lg font-medium transition-all duration-150 hover:bg-border-light border border-border-medium;
+    }
+
+    /* ========== INPUTS ========== */
+    .input-field {
+        @apply w-full px-3 py-2 border border-border-medium rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-150 bg-white;
+    }
+
+    .input-error {
+        @apply border-error focus:ring-error focus:border-error;
+    }
+
+    /* ========== CARDS E CONTAINERS ========== */
+    .card {
+        @apply bg-white rounded-lg shadow-sm border border-border-light p-6;
+    }
+
+    .card-accent {
+        @apply bg-accent rounded-lg border border-border-medium p-4;
+    }
+
+    .container-error {
+        @apply bg-red-50 border-2 border-red-200 rounded-lg p-3;
+    }
+
+    .container-success {
+        @apply bg-green-50 border-2 border-green-200 rounded-lg p-3;
+    }
+
+    .container-warning {
+        @apply bg-yellow-50 border-2 border-yellow-200 rounded-lg p-3;
+    }
+
+    /* ========== TABELAS ========== */
+    .table-header {
+        @apply bg-accent text-text-primary font-semibold text-sm border-b border-border-medium;
+    }
+
+    .table-row {
+        @apply border-b border-border-light hover:bg-neutral-light transition-all duration-150;
+    }
+
+    .table-row-error {
+        @apply hover:bg-red-50;
+    }
+
+    /* ========== BADGES DE STATUS ========== */
+    .badge-success {
+        @apply bg-green-100 text-success px-2 py-1 text-xs font-medium rounded;
+    }
+
+    .badge-warning {
+        @apply bg-yellow-100 text-warning px-2 py-1 text-xs font-medium rounded;
+    }
+
+    .badge-error {
+        @apply bg-red-100 text-error px-2 py-1 text-xs font-medium rounded;
+    }
+
+    /* ========== ESTADOS DE CAMPO ========== */
+    .field-error {
+        @apply border-error bg-red-50;
+    }
+
+    .field-success {
+        @apply border-success bg-green-50;
+    }
+
+    .field-warning {
+        @apply border-warning bg-yellow-50;
+    }
+
+    /* ========== LOADING SPINNER ========== */
+    .spinner {
+        @apply animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full;
+    }
+}

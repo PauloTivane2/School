@@ -21,6 +21,6 @@
     },
     "types": ["vite/client"]
   },
-  "include": ["src", "../backend/src/modules/routes/admin.routes.ts"],
+  "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
