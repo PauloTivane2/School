@@ -19,9 +19,19 @@ module.exports = {
                 'text-secondary': '#374151',  // texto secundário
                 'border-light': '#E5E7EB',    // borda clara
                 'border-medium': '#D1D5DB',   // borda média
+                
+                // Cores de status com variações
                 success: '#10B981',           // verde sucesso
+                'success-hover': '#059669',   // verde hover
+                'success-light': '#D1FAE5',   // verde claro (bg)
+                
                 warning: '#F59E0B',           // amarelo aviso
+                'warning-hover': '#D97706',   // amarelo hover
+                'warning-light': '#FEF3C7',   // amarelo claro (bg)
+                
                 error: '#EF4444',             // vermelho erro
+                'error-hover': '#DC2626',     // vermelho hover
+                'error-light': '#FEE2E2',     // vermelho claro (bg)
             },
             fontFamily: {
                 sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'sans-serif'],

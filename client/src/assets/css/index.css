@@ -34,15 +34,15 @@
     }
 
     .btn-success {
-        @apply bg-success text-white px-4 py-2 rounded-lg font-medium transition-all duration-150 hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed;
+        @apply bg-success text-white px-4 py-2 rounded-lg font-medium transition-all duration-150 hover:bg-success-hover disabled:opacity-50 disabled:cursor-not-allowed;
     }
 
     .btn-warning {
-        @apply bg-warning text-white px-4 py-2 rounded-lg font-medium transition-all duration-150 hover:bg-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed;
+        @apply bg-warning text-white px-4 py-2 rounded-lg font-medium transition-all duration-150 hover:bg-warning-hover disabled:opacity-50 disabled:cursor-not-allowed;
     }
 
     .btn-danger {
-        @apply bg-error text-white px-4 py-2 rounded-lg font-medium transition-all duration-150 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed;
+        @apply bg-error text-white px-4 py-2 rounded-lg font-medium transition-all duration-150 hover:bg-error-hover disabled:opacity-50 disabled:cursor-not-allowed;
     }
 
     .btn-disabled {
@@ -72,15 +72,15 @@
     }
 
     .container-error {
-        @apply bg-red-50 border-2 border-red-200 rounded-lg p-3;
+        @apply bg-error-light border-2 border-error/30 rounded-lg p-3;
     }
 
     .container-success {
-        @apply bg-green-50 border-2 border-green-200 rounded-lg p-3;
+        @apply bg-success-light border-2 border-success/30 rounded-lg p-3;
     }
 
     .container-warning {
-        @apply bg-yellow-50 border-2 border-yellow-200 rounded-lg p-3;
+        @apply bg-warning-light border-2 border-warning/30 rounded-lg p-3;
     }
 
     /* ========== TABELAS ========== */
@@ -93,33 +93,33 @@
     }
 
     .table-row-error {
-        @apply hover:bg-red-50;
+        @apply hover:bg-error-light;
     }
 
     /* ========== BADGES DE STATUS ========== */
     .badge-success {
-        @apply bg-green-100 text-success px-2 py-1 text-xs font-medium rounded;
+        @apply bg-success-light text-success px-2 py-1 text-xs font-medium rounded;
     }
 
     .badge-warning {
-        @apply bg-yellow-100 text-warning px-2 py-1 text-xs font-medium rounded;
+        @apply bg-warning-light text-warning px-2 py-1 text-xs font-medium rounded;
     }
 
     .badge-error {
-        @apply bg-red-100 text-error px-2 py-1 text-xs font-medium rounded;
+        @apply bg-error-light text-error px-2 py-1 text-xs font-medium rounded;
     }
 
     /* ========== ESTADOS DE CAMPO ========== */
     .field-error {
-        @apply border-error bg-red-50;
+        @apply border-error bg-error-light;
     }
 
     .field-success {
-        @apply border-success bg-green-50;
+        @apply border-success bg-success-light;
     }
 
     .field-warning {
-        @apply border-warning bg-yellow-50;
+        @apply border-warning bg-warning-light;
     }
 
     /* ========== LOADING SPINNER ========== */

@@ -111,7 +111,7 @@ const DisciplinaForm = ({ disciplina, onClose, refresh }: DisciplinaFormProps) =
               disabled={!isClearEnabled}
               className={`px-6 py-2 border-2 rounded-lg ${
                 isClearEnabled
-                  ? 'bg-red-50 hover:bg-red-100 border-error'
+                  ? 'bg-error-light hover:bg-error-light border-error'
                   : 'bg-primary/10 text-neutral-gray cursor-not-allowed'
               }`}
             >

@@ -6,18 +6,21 @@
     "scripts": {
         "build": "tsc",
         "start": "node -r tsconfig-paths/register dist/server.js",
-        "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/server.ts",
+        "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/app.ts",
         "migrate": "ts-node -r tsconfig-paths/register src/database/runMigrations.ts",
         "migrate:rollback": "ts-node -r tsconfig-paths/register src/database/runMigrations.ts rollback",
+        "seed": "ts-node -r tsconfig-paths/register src/database/seed.ts",
         "verify": "node verify-setup.js",
         "test": "jest",
         "lint": "eslint src --ext .ts"
     },
     "dependencies": {
         "bcryptjs": "^3.0.2",
+        "cors": "^2.8.5",
         "dotenv": "^16.0.3",
         "express": "^4.21.2",
         "helmet": "^8.1.0",
+        "jsonwebtoken": "^9.0.2",
         "morgan": "^1.10.1",
         "pg": "^8.11.0"
     },

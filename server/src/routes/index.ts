@@ -7,6 +7,8 @@ import paymentsRoutes from '../modules/payments/payments.routes';
 import attendanceRoutes from '../modules/attendance/attendance.routes';
 import gradesRoutes from '../modules/grades/grades.routes';
 import adminRoutes from '../modules/admin/admin.routes';
+import guardiansRoutes from '../modules/guardians/guardians.routes';
+import staffRoutes from '../modules/staff/staff.routes';
 
 // ===== ROTAS EXISTENTES (COMPATIBILIDADE) =====
 import funcionariosRoutes from './funcionarios.routes';
@@ -25,7 +27,9 @@ const router = Router();
  * RF12-RF14: Notas
  */
 router.use('/students', studentsRoutes);           // RF01: Gestão de Alunos (CRUD completo)
-router.use('/classes', classesRoutes);             // RF04: Gestão de Classes e Turmas
+router.use('/guardians', guardiansRoutes);         // RF02: Gestão de Encarregados (CRUD completo)
+router.use('/staff', staffRoutes);                 // RF03: Gestão de Funcionários/Docentes (CRUD completo)
+router.use('/classes', classesRoutes);             // RF04: Gestão de Classes, Turmas e Horários (CRUD completo)
 router.use('/payments', paymentsRoutes);           // RF05-RF09: Financeiro (Pagamentos)
 router.use('/attendance', attendanceRoutes);       // RF10-RF11: Frequência (Presenças)
 router.use('/grades', gradesRoutes);               // RF12-RF14: Notas e Boletins
@@ -47,8 +51,9 @@ router.get('/', (_req: Request, res: Response) => {
     version: '2.0.0',
     status: 'operational',
     modules: {
-      refactored: ['students', 'classes', 'payments', 'attendance', 'grades'],
-      existing: ['funcionarios', 'encarregados', 'disciplinas', 'agenda', 'dropdowns', 'admin'],
+      refactored: ['students', 'guardians', 'staff', 'classes', 'payments', 'attendance', 'grades'],
+      legacy: ['funcionarios', 'encarregados', 'disciplinas', 'agenda', 'dropdowns'],
+      admin: ['admin'],
     },
   });
 });

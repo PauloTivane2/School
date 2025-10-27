@@ -271,7 +271,7 @@ const GradesList = () => {
                                     } ${erros[`${a.id}_${c}`] ? 'border-error' : ''}`}
                                   />
                                   {erros[`${a.id}_${c}`] && (
-                                    <div className="absolute left-1/2 -translate-x-1/2 -top-5 text-[11px] text-primary/90 bg-red-50 px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
+                                    <div className="absolute left-1/2 -translate-x-1/2 -top-5 text-[11px] text-primary/90 bg-error-light px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
                                       {erros[`${a.id}_${c}`]}
                                     </div>
                                   )}
@@ -314,7 +314,7 @@ const GradesList = () => {
                                 }`}
                               />
                               {erros[`${a.id}_exame`] && (
-                                <div className="absolute left-1/2 -translate-x-1/2 -top-5 text-[11px] text-primary/90 bg-red-50 px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
+                                <div className="absolute left-1/2 -translate-x-1/2 -top-5 text-[11px] text-primary/90 bg-error-light px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
                                   {erros[`${a.id}_exame`]}
                                 </div>
                               )}
@@ -331,8 +331,8 @@ const GradesList = () => {
                             <td className="px-3 py-1 text-center">
                               <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
                                 a.resultadoFinal === 'Reprovado'
-                                  ? 'bg-red-100 text-error'
-                                  : 'bg-green-100 text-success'
+                                  ? 'bg-error-light text-error'
+                                  : 'bg-success-light text-success'
                               }`}>
                                 {a.resultadoFinal}
                               </span>

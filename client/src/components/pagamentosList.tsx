@@ -211,10 +211,10 @@ const PaymentsList = () => {
                       <span
                         className={`px-2 py-1 text-xs font-medium rounded ${
                           p.estado === 'pago'
-                            ? 'bg-green-50 text-success'
+                            ? 'bg-success-light text-success'
                             : p.estado === 'pendente'
-                            ? 'bg-yellow-50 text-warning'
-                            : 'bg-red-50 text-error'
+                            ? 'bg-warning-light text-warning'
+                            : 'bg-error-light text-error'
                         }`}
                       >
                         {p.estado}

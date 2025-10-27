@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { initDatabase } from './config/database';
+import { runSeedIfNeeded } from './database/seed';
 
 // Middlewares globais
 import { errorHandler } from './core/middleware/error-handler.middleware';
@@ -62,7 +63,10 @@ app.use(errorHandler);
 
 // 🚀 Inicializar banco de dados e iniciar servidor
 initDatabase()
-  .then(() => {
+  .then(async () => {
+    // Executar seed se necessário
+    await runSeedIfNeeded();
+    
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
       console.log('='.repeat(60));

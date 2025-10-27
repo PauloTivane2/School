@@ -144,7 +144,7 @@ const AttendanceList = () => {
               type="text"
               value={`${mesAtual} ${anoAtual}`}
               disabled
-              className="px-4 py-1 border-2 border-primary rounded-md text-sm font-bold text-primary bg-yellow-50 cursor-not-allowed"
+              className="px-4 py-1 border-2 border-primary rounded-md text-sm font-bold text-primary bg-warning-light cursor-not-allowed"
             />
           </div>
         </div>
@@ -201,13 +201,13 @@ const AttendanceList = () => {
                   type="text"
                   value={ausentes.numero}
                   readOnly
-                  className="w-1/2 px-2 py-[4px] border-2 border-error rounded-md bg-red-50 text-xs font-bold text-primary/90 text-center"
+                  className="w-1/2 px-2 py-[4px] border-2 border-error rounded-md bg-error-light text-xs font-bold text-primary/90 text-center"
                 />
                 <input
                   type="text"
                   value={`${ausentes.percentagem.toFixed(1)}%`}
                   readOnly
-                  className="w-1/2 px-2 py-[5px] border-2 border-error rounded-md bg-red-50 text-xs font-bold text-primary/90 text-center"
+                  className="w-1/2 px-2 py-[5px] border-2 border-error rounded-md bg-error-light text-xs font-bold text-primary/90 text-center"
                 />
               </div>
             </div>

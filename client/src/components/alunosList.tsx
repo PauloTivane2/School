@@ -271,7 +271,7 @@ const StudentsList = () => {
                       <td className="px-4 py-3 text-sm text-text-secondary">{s.encarregado_nome}</td>
                       <td className="px-4 py-3 text-sm">
                         <span className={`px-2 py-1 rounded text-xs font-medium ${
-                          s.status === 'ativo' ? 'bg-green-50 text-success' : 'bg-red-50 text-error'
+                          s.status === 'ativo' ? 'bg-success-light text-success' : 'bg-error-light text-error'
                         }`}>
                           {s.status}
                         </span>

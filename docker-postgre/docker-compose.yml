@@ -11,7 +11,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: sua_senha_aqui
+      POSTGRES_PASSWORD: 1234
       POSTGRES_DB: sge_db
     ports:
       - "5432:5432"
@@ -35,9 +35,9 @@ services:
       - DB_HOST=db
       - DB_PORT=5432
       - DB_USER=postgres
-      - DB_PASSWORD=sua_senha_aqui
+      - DB_PASSWORD=1234
       - DB_NAME=sge_db
-      - JWT_SECRET=sua_chave_secreta_super_segura_aqui
+      - JWT_SECRET=minhachavesecreta123
       - JWT_EXPIRES_IN=7d
       - FRONTEND_URL=http://localhost:5173
     volumes:

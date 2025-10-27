@@ -210,7 +210,7 @@ const ClasseForm = ({ classe, onClose, refresh }: ClasseFormProps) => {
                 Classe Selecionada: <span className="text-primary">{selectedClasse}</span>
               </h4>
               <table className="w-full border text-sm text-primary">
-                <thead className="bg-red-50">
+                <thead className="bg-error-light">
                   <tr>
                     <th className="px-4 py-2 border text-center w-20">Ordem</th>
                     <th className="px-4 py-2 border text-left">Professor</th>
@@ -220,7 +220,7 @@ const ClasseForm = ({ classe, onClose, refresh }: ClasseFormProps) => {
                 </thead>
                 <tbody>
                   {relacoesTemp.map((r, index) => (
-                    <tr key={r.id} className="hover:bg-red-50">
+                    <tr key={r.id} className="hover:bg-error-light">
                       <td className="border px-4 py-2 text-center">{index + 1}</td>
                       <td className="border px-4 py-2 text-left">{r.professor.nome_funcionario}</td>
                       <td className="border px-4 py-2 text-left">{r.disciplina.nome_disciplina}</td>
@@ -241,7 +241,7 @@ const ClasseForm = ({ classe, onClose, refresh }: ClasseFormProps) => {
                 <button
                   type="button"
                   onClick={handleClearAll}
-                  className="text-sm px-5 py-2 border border-error rounded-lg bg-red-50 text-primary/90 font-medium hover:bg-red-100 transition"
+                  className="text-sm px-5 py-2 border border-error rounded-lg bg-error-light text-primary/90 font-medium hover:bg-error-light transition"
                 >
                   Limpar Tudo
                 </button>
