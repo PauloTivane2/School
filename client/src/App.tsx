@@ -1,5 +1,6 @@
 import React, { useState, Component } from 'react';
 import { Users, DollarSign, Menu, Calendar, X, Home, UserCheck, Award, Settings, LogOut, UserCog, BookOpen, TrendingUp, Bell } from 'lucide-react';
+import Dialog from './components/Dialog';
 
 // Componentes
 import GuardiansView from './components/encarregadosList';
@@ -14,7 +15,10 @@ import AgendaPage from './components/agendaList';
 // Pages
 import AdminDashboard from './pages/AdminDashboard';
 import ProfessoresDashboardList from './pages/professoresDashboardList';
-import Login from './pages/loginView';  
+import Login from './pages/loginView';
+
+// Services
+import authService from './services/authService';  
 
 
 // ErrorBoundary
@@ -48,6 +52,12 @@ const App = () => {
   const [currentView, setCurrentView] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [notifications] = useState(3);
+  const [dialog, setDialog] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: 'error' | 'success' | 'info' | 'warning';
+  }>({ isOpen: false, title: '', message: '', type: 'info' });
 
   // Menu dinâmico por role
   const getMenuItems = () => {
@@ -76,17 +86,36 @@ const App = () => {
     return [];
   };
 
-  const handleLoginSuccess = (username: string, password: string) => {
-    // Credenciais simuladas
-    if (username === 'Admin' && password === '12345') {
-      setUser({ name: 'Administrador', role: 'Admin' });
-    } else if (username === 'Professor' && password === '54321') {
-      setUser({ name: 'Professor Teste', role: 'Professor' });
-    } else {
-      alert('Usuário ou senha inválidos!');
-      return;
+  const showDialog = (title: string, message: string, type: 'error' | 'success' | 'info' | 'warning' = 'info') => {
+    setDialog({ isOpen: true, title, message, type });
+  };
+
+  const closeDialog = () => {
+    setDialog({ ...dialog, isOpen: false });
+  };
+
+  const handleLoginSuccess = async (email: string, password: string) => {
+    try {
+      const result = await authService.login({ email, password });
+      
+      if (result.token && result.user) {
+        // Mapear a função do usuário para o role esperado
+        const role = (result.user.funcao === 'Admin' || result.user.funcao === 'Diretor') ? 'Admin' : 'Professor';
+        setUser({ 
+          name: result.user.nome || result.user.nome_funcionario, 
+          role 
+        });
+        setCurrentView('dashboard');
+        console.log('✅ Usuário logado:', { nome: result.user.nome, funcao: result.user.funcao, role });
+      } else {
+        showDialog('Erro de Autenticação', 'Não foi possível fazer login. Tente novamente.', 'error');
+      }
+    } catch (error: any) {
+      console.error('Erro no login:', error);
+      const errorMessage = error?.response?.data?.error?.message || 'Credenciais inválidas. Verifique seu email e senha.';
+      showDialog('Erro de Autenticação', errorMessage, 'error');
+      throw error; // Re-throw para o loginView parar o loading
     }
-    setCurrentView('dashboard');
   };
 
   const handleLogout = () => {
@@ -115,10 +144,19 @@ const App = () => {
 
 if (!user) {
   return (
-    <Login
-      onLoginSuccess={(username, password) => handleLoginSuccess(username, password)}
-      onForgotPassword={() => alert('Recuperar senha')}
-    />
+    <>
+      <Dialog
+        isOpen={dialog.isOpen}
+        onClose={closeDialog}
+        title={dialog.title}
+        message={dialog.message}
+        type={dialog.type}
+      />
+      <Login
+        onLoginSuccess={(username, password) => handleLoginSuccess(username, password)}
+        onForgotPassword={() => showDialog('Recuperar Senha', 'Entre em contato com o administrador do sistema para recuperar sua senha.', 'info')}
+      />
+    </>
   );
 }
 

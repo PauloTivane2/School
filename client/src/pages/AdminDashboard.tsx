@@ -39,9 +39,10 @@ const AdminDashboard = () => {
     try {
       const res = await fetch('http://localhost:3000/api/admin/classes-detalhes');
       const data = await res.json();
-      setAllClasses(data);
+      setAllClasses(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Erro ao carregar classes:', err);
+      setAllClasses([]);
     }
   };
 
@@ -155,9 +156,13 @@ const AdminDashboard = () => {
               aria-label="Selecionar classe"
             >
               <option value="" disabled>Selecionar</option>
-              {[...new Set(allClasses.map((c) => c.nome_classe))].map((nome) => (
-                <option key={nome} value={nome}>{nome}</option>
-              ))}
+              {Array.isArray(allClasses) && allClasses.length > 0 ? (
+                [...new Set(allClasses.map((c) => c.nome_classe))].map((nome) => (
+                  <option key={nome} value={nome}>{nome}</option>
+                ))
+              ) : (
+                <option disabled>Nenhuma classe disponível</option>
+              )}
             </select>
           </div>
 

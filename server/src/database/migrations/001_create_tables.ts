@@ -5,6 +5,10 @@ export async function runMigration(client?: any) {
   const c = client || pool;
 
   try {
+    // ===== Habilitar extensão pgcrypto para criptografia =====
+    await c.query(`CREATE EXTENSION IF NOT EXISTS pgcrypto;`);
+    console.log('✅ Extensão pgcrypto habilitada');
+
     // ===== Tabela Encarregados =====
     await c.query(`
       CREATE TABLE IF NOT EXISTS encarregados (
@@ -185,4 +189,36 @@ export async function runMigration(client?: any) {
   }
 }
 
+export async function rollbackMigration(client?: any) {
+  const c = client || pool;
 
+  try {
+    console.log('🔄 Revertendo migrações...');
+    
+    // Remover tabelas na ordem inversa (respeitar foreign keys)
+    await c.query(`DROP TABLE IF EXISTS exame_pacotes CASCADE;`);
+    await c.query(`DROP TABLE IF EXISTS pagamentos CASCADE;`);
+    await c.query(`DROP TABLE IF EXISTS mensalidades CASCADE;`);
+    await c.query(`DROP TABLE IF EXISTS matriculas CASCADE;`);
+    await c.query(`DROP TABLE IF EXISTS presencas CASCADE;`);
+    await c.query(`DROP TABLE IF EXISTS notas CASCADE;`);
+    await c.query(`DROP TABLE IF EXISTS avaliacoes CASCADE;`);
+    await c.query(`DROP TABLE IF EXISTS contactos CASCADE;`);
+    await c.query(`DROP TABLE IF EXISTS alunos CASCADE;`);
+    await c.query(`DROP TABLE IF EXISTS turmas CASCADE;`);
+    await c.query(`DROP TABLE IF EXISTS classes_relacoes CASCADE;`);
+    await c.query(`DROP TABLE IF EXISTS classes CASCADE;`);
+    await c.query(`DROP TABLE IF EXISTS disciplinas CASCADE;`);
+    await c.query(`DROP TABLE IF EXISTS funcionarios CASCADE;`);
+    await c.query(`DROP TABLE IF EXISTS encarregados CASCADE;`);
+
+    console.log('✅ Todas as tabelas removidas com sucesso!');
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error('❌ Erro ao reverter migrações:', err.message);
+    } else {
+      console.error('❌ Erro desconhecido ao reverter migrações:', err);
+    }
+    throw err;
+  }
+}

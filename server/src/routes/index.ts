@@ -11,6 +11,7 @@ import guardiansRoutes from '../modules/guardians/guardians.routes';
 import staffRoutes from '../modules/staff/staff.routes';
 
 // ===== ROTAS EXISTENTES (COMPATIBILIDADE) =====
+import authRoutes from './auth.routes';
 import funcionariosRoutes from './funcionarios.routes';
 import encarregadosRoutes from './encarregados';
 import disciplinasRoutes from './disciplinas.routes';
@@ -37,6 +38,7 @@ router.use('/grades', gradesRoutes);               // RF12-RF14: Notas e Boletin
 /**
  * ===== ROTAS EXISTENTES (MANTIDAS PARA COMPATIBILIDADE) =====
  */
+router.use('/auth', authRoutes);                   // Autenticação (Login/Logout)
 router.use('/funcionarios', funcionariosRoutes);   // RF03: Gestão de Funcionários
 router.use('/encarregados', encarregadosRoutes);   // RF02: Gestão de Encarregados
 router.use('/disciplinas', disciplinasRoutes);     // Disciplinas
@@ -54,6 +56,7 @@ router.get('/', (_req: Request, res: Response) => {
       refactored: ['students', 'guardians', 'staff', 'classes', 'payments', 'attendance', 'grades'],
       legacy: ['funcionarios', 'encarregados', 'disciplinas', 'agenda', 'dropdowns'],
       admin: ['admin'],
+      auth: ['auth'],
     },
   });
 });

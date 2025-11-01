@@ -28,13 +28,18 @@ export class AuthService {
     const { email, password } = credentials;
 
     try {
+      console.log('🔐 Tentativa de login:', { email });
+      
       // Buscar funcionário por email
       const result = await pool.query(
         'SELECT id_funcionarios, nome_funcionario, email, funcao, senha_hash FROM funcionarios WHERE email = $1 AND estado = $2',
         [email, 'ativo']
       );
 
+      console.log('📊 Usuários encontrados:', result.rows.length);
+
       if (result.rows.length === 0) {
+        console.log('❌ Nenhum usuário encontrado com este email');
         return {
           success: false,
           message: 'Credenciais inválidas ou usuário inativo',
@@ -42,16 +47,27 @@ export class AuthService {
       }
 
       const user = result.rows[0];
+      console.log('👤 Usuário encontrado:', { 
+        id: user.id_funcionarios, 
+        nome: user.nome_funcionario,
+        hash_length: user.senha_hash?.length,
+        hash_start: user.senha_hash?.substring(0, 10)
+      });
 
       // Verificar senha
+      console.log('🔑 Verificando senha...');
       const isPasswordValid = await bcrypt.compare(password, user.senha_hash);
+      console.log('✅ Senha válida:', isPasswordValid);
 
       if (!isPasswordValid) {
+        console.log('❌ Senha incorreta');
         return {
           success: false,
           message: 'Credenciais inválidas',
         };
       }
+
+      console.log('✅ Login bem-sucedido!');
 
       // Gerar token JWT
       const token = jwt.sign(

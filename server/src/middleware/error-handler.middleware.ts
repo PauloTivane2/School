@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { ApiResponse } from '../shared/utils/response.util';
+import { ApiResponse } from '../utils/response.util';
 
 /**
  * Classe personalizada para erros da aplicação

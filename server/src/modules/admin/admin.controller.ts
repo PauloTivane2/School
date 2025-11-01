@@ -2,6 +2,40 @@ import { Request, Response } from 'express';
 import { pool } from '../../config/database';
 
 export class AdminController {
+  // 🔹 Dashboard - estatísticas gerais
+  async getDashboard(req: Request, res: Response): Promise<void> {
+    try {
+      const stats = await pool.query(`
+        SELECT 
+          (SELECT COUNT(*) FROM alunos WHERE estado = 'ativo') as total_alunos,
+          (SELECT COUNT(*) FROM funcionarios WHERE estado = 'ativo') as total_funcionarios,
+          (SELECT COUNT(*) FROM classes) as total_classes,
+          (SELECT COUNT(*) FROM turmas) as total_turmas
+      `);
+      res.json(stats.rows[0]);
+    } catch (error) {
+      console.error('Erro em getDashboard:', error);
+      res.status(500).json({ error: 'Erro ao buscar dashboard' });
+    }
+  }
+
+  // 🔹 Estatísticas detalhadas
+  async getStats(req: Request, res: Response): Promise<void> {
+    try {
+      const stats = await pool.query(`
+        SELECT 
+          (SELECT COUNT(*) FROM alunos WHERE estado = 'ativo') as alunos_ativos,
+          (SELECT COUNT(*) FROM alunos WHERE estado = 'inativo') as alunos_inativos,
+          (SELECT COUNT(*) FROM pagamentos WHERE estado = 'pago') as pagamentos_realizados,
+          (SELECT COUNT(*) FROM pagamentos WHERE estado = 'pendente') as pagamentos_pendentes
+      `);
+      res.json(stats.rows[0]);
+    } catch (error) {
+      console.error('Erro em getStats:', error);
+      res.status(500).json({ error: 'Erro ao buscar estatísticas' });
+    }
+  }
+
   // 🔹 Buscar detalhes das turmas únicas por classe
   static async getClassesDetalhes(req: Request, res: Response): Promise<void> {
     try {
@@ -55,7 +89,7 @@ export class AdminController {
   }
 
   // 🔹 Excluir uma classe
-  static async deleteClasse(req: Request, res: Response): Promise<void> {
+  async deleteClasse(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
       await pool.query('DELETE FROM classes WHERE id_classes = $1', [id]);

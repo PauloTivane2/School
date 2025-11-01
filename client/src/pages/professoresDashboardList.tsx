@@ -160,11 +160,11 @@ const ProfessorDashboard = () => {
             <option value="" disabled>
               Selecionar
             </option>
-            {professor?.classes.split(',').map((nome) => (
+            {professor?.classes?.split(',').map((nome) => (
               <option key={nome} value={nome}>
                 {nome}
               </option>
-            ))}
+            )) || <option disabled>Nenhuma classe atribuída</option>}
           </select>
         </div>
 
