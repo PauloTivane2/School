@@ -60,4 +60,45 @@ export class PaymentsController {
     const stats = await this.service.getPaymentStats(filters);
     return ApiResponse.success(res, stats, 'Estatísticas geradas com sucesso');
   });
+
+  /**
+   * GET /api/payments/recibo/:id
+   * Gerar recibo de pagamento
+   */
+  generateReceipt = asyncHandler(async (req: Request, res: Response) => {
+    const receipt = await this.service.generateReceipt(Number(req.params.id));
+    return ApiResponse.success(res, receipt, 'Recibo gerado com sucesso');
+  });
+
+  /**
+   * GET /api/payments/historico/:alunoId
+   * Histórico completo de pagamentos do aluno
+   */
+  getPaymentHistory = asyncHandler(async (req: Request, res: Response) => {
+    const history = await this.service.getPaymentHistory(Number(req.params.alunoId));
+    return ApiResponse.success(res, history, 'Histórico obtido com sucesso');
+  });
+
+  /**
+   * POST /api/payments/desconto
+   * Aplicar desconto ou bolsa
+   */
+  applyDiscount = asyncHandler(async (req: Request, res: Response) => {
+    const { aluno_id, tipo, valor, motivo } = req.body;
+    const result = await this.service.applyDiscount(aluno_id, tipo, valor, motivo);
+    return ApiResponse.success(res, result, 'Desconto aplicado com sucesso');
+  });
+
+  /**
+   * GET /api/payments/pendentes
+   * Listar pagamentos pendentes
+   */
+  getPending = asyncHandler(async (req: Request, res: Response) => {
+    const { turma_id, mes } = req.query;
+    const pending = await this.service.getPendingPayments(
+      turma_id ? Number(turma_id) : undefined,
+      mes ? Number(mes) : undefined
+    );
+    return ApiResponse.success(res, pending, 'Pagamentos pendentes listados');
+  });
 }

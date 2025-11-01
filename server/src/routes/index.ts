@@ -9,6 +9,7 @@ import gradesRoutes from '../modules/grades/grades.routes';
 import adminRoutes from '../modules/admin/admin.routes';
 import guardiansRoutes from '../modules/guardians/guardians.routes';
 import staffRoutes from '../modules/staff/staff.routes';
+import reportsRoutes from '../modules/reports/reports.routes';
 
 // ===== ROTAS EXISTENTES (COMPATIBILIDADE) =====
 import authRoutes from './auth.routes';
@@ -34,6 +35,7 @@ router.use('/classes', classesRoutes);             // RF04: Gestão de Classes, 
 router.use('/payments', paymentsRoutes);           // RF05-RF09: Financeiro (Pagamentos)
 router.use('/attendance', attendanceRoutes);       // RF10-RF11: Frequência (Presenças)
 router.use('/grades', gradesRoutes);               // RF12-RF14: Notas e Boletins
+router.use('/relatorios', reportsRoutes);          // RF15-RF19: Relatórios (Financeiro, Frequência, Acadêmico)
 
 /**
  * ===== ROTAS EXISTENTES (MANTIDAS PARA COMPATIBILIDADE) =====
