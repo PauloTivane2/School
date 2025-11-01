@@ -91,4 +91,32 @@ export class StudentsController {
     const students = await this.service.findByTurma(Number(turmaId));
     return ApiResponse.success(res, students, 'Estudantes da turma listados com sucesso');
   });
+
+  /**
+   * GET /api/students/dropdowns/classes
+   * Buscar lista de classes para dropdown
+   */
+  getClassesDropdown = asyncHandler(async (req: Request, res: Response) => {
+    const classes = await this.service.getClassesDropdown();
+    return ApiResponse.success(res, classes, 'Classes listadas com sucesso');
+  });
+
+  /**
+   * GET /api/students/dropdowns/turmas
+   * Buscar lista de turmas para dropdown (com filtro opcional por ano)
+   */
+  getTurmasDropdown = asyncHandler(async (req: Request, res: Response) => {
+    const { ano } = req.query;
+    const turmas = await this.service.getTurmasDropdown(ano ? Number(ano) : undefined);
+    return ApiResponse.success(res, turmas, 'Turmas listadas com sucesso');
+  });
+
+  /**
+   * GET /api/students/dropdowns/encarregados
+   * Buscar lista de encarregados para dropdown
+   */
+  getEncarregadosDropdown = asyncHandler(async (req: Request, res: Response) => {
+    const encarregados = await this.service.getEncarregadosDropdown();
+    return ApiResponse.success(res, encarregados, 'Encarregados listados com sucesso');
+  });
 }

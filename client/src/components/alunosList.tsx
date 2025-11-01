@@ -49,6 +49,14 @@ const StudentsList = () => {
         const res = await fetch(`http://localhost:3000/api/students${qs}`);
         if (!res.ok) throw new Error('Erro ao buscar alunos');
         const data = await res.json();
+        
+        // Verificar se data é array
+        if (!Array.isArray(data)) {
+          console.error('Resposta não é um array:', data);
+          setStudents([]);
+          return;
+        }
+        
         const formatted: Student[] = data.map((s: any) => ({
     id: s.usuario ?? s.id_aluno ?? s.id,
     usuario: s.usuario ?? '',

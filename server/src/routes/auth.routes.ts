@@ -23,4 +23,22 @@ router.post('/logout', (req, res) => authController.logout(req, res));
  */
 router.get('/me', authMiddleware, (req, res) => authController.me(req, res));
 
+/**
+ * POST /api/auth/forgot-password
+ * Solicita recuperação de senha
+ */
+router.post('/forgot-password', (req, res) => authController.forgotPassword(req, res));
+
+/**
+ * POST /api/auth/validate-reset-token
+ * Valida token de recuperação
+ */
+router.post('/validate-reset-token', (req, res) => authController.validateResetToken(req, res));
+
+/**
+ * POST /api/auth/reset-password
+ * Reseta senha com token
+ */
+router.post('/reset-password', (req, res) => authController.resetPassword(req, res));
+
 export default router;

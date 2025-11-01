@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { AuthService } from '../services/auth.service';
+import { PasswordResetService } from '../services/password-reset.service';
 
 const authService = new AuthService();
+const passwordResetService = new PasswordResetService();
 
 export class AuthController {
   /**
@@ -119,6 +121,171 @@ export class AuthController {
         success: false,
         error: {
           message: 'Erro interno do servidor',
+          code: 'INTERNAL_SERVER_ERROR',
+        },
+      });
+    }
+  }
+
+  /**
+   * POST /api/auth/forgot-password
+   * Solicita recuperação de senha
+   */
+  async forgotPassword(req: Request, res: Response): Promise<void> {
+    try {
+      const { email } = req.body;
+
+      if (!email) {
+        res.status(400).json({
+          success: false,
+          error: {
+            message: 'Email é obrigatório',
+            code: 'MISSING_EMAIL',
+          },
+        });
+        return;
+      }
+
+      // Validar formato de email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        res.status(400).json({
+          success: false,
+          error: {
+            message: 'Email inválido',
+            code: 'INVALID_EMAIL',
+          },
+        });
+        return;
+      }
+
+      const result = await passwordResetService.requestPasswordReset(email);
+
+      // Por segurança, sempre retornar sucesso mesmo se email não existir
+      res.status(200).json({
+        success: true,
+        message: 'Se o email existir, você receberá instruções para recuperar sua senha',
+        data: result ? {
+          token: result.token, // Em produção, enviar por email
+          expiresIn: '1 hora'
+        } : null
+      });
+    } catch (error: any) {
+      console.error('Erro ao solicitar recuperação de senha:', error);
+      res.status(500).json({
+        success: false,
+        error: {
+          message: 'Erro ao processar solicitação',
+          code: 'INTERNAL_SERVER_ERROR',
+        },
+      });
+    }
+  }
+
+  /**
+   * POST /api/auth/validate-reset-token
+   * Valida token de recuperação
+   */
+  async validateResetToken(req: Request, res: Response): Promise<void> {
+    try {
+      const { token } = req.body;
+
+      if (!token) {
+        res.status(400).json({
+          success: false,
+          error: {
+            message: 'Token é obrigatório',
+            code: 'MISSING_TOKEN',
+          },
+        });
+        return;
+      }
+
+      const validation = await passwordResetService.validateToken(token);
+
+      if (!validation.valid) {
+        res.status(400).json({
+          success: false,
+          error: {
+            message: 'Token inválido ou expirado',
+            code: 'INVALID_TOKEN',
+          },
+        });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        message: 'Token válido',
+        data: {
+          email: validation.email
+        }
+      });
+    } catch (error: any) {
+      console.error('Erro ao validar token:', error);
+      res.status(500).json({
+        success: false,
+        error: {
+          message: 'Erro ao validar token',
+          code: 'INTERNAL_SERVER_ERROR',
+        },
+      });
+    }
+  }
+
+  /**
+   * POST /api/auth/reset-password
+   * Reseta senha com token
+   */
+  async resetPassword(req: Request, res: Response): Promise<void> {
+    try {
+      const { token, newPassword } = req.body;
+
+      if (!token || !newPassword) {
+        res.status(400).json({
+          success: false,
+          error: {
+            message: 'Token e nova senha são obrigatórios',
+            code: 'MISSING_FIELDS',
+          },
+        });
+        return;
+      }
+
+      if (newPassword.length < 6) {
+        res.status(400).json({
+          success: false,
+          error: {
+            message: 'A senha deve ter no mínimo 6 caracteres',
+            code: 'WEAK_PASSWORD',
+          },
+        });
+        return;
+      }
+
+      const result = await passwordResetService.resetPassword(token, newPassword);
+
+      if (!result.success) {
+        res.status(400).json({
+          success: false,
+          error: {
+            message: result.message,
+            code: 'RESET_FAILED',
+          },
+        });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        message: result.message,
+      });
+    } catch (error: any) {
+      console.error('Erro ao resetar senha:', error);
+      res.status(500).json({
+        success: false,
+        error: {
+          message: 'Erro ao resetar senha',
           code: 'INTERNAL_SERVER_ERROR',
         },
       });

@@ -213,7 +213,11 @@ export default function StudentForm({ student, onClose, onSuccess }: StudentForm
                 className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               >
                 <option value="" disabled>Selecione...</option>
-                {classes.map(c => <option key={c.id_classes} value={c.id_classes}>{c.nome_classe}</option>)}
+                {Array.isArray(classes) && classes.length > 0 ? (
+                  classes.map(c => <option key={c.id_classes} value={c.id_classes}>{c.nome_classe}</option>)
+                ) : (
+                  <option disabled>Nenhuma classe disponível</option>
+                )}
               </select>
             </div>
           </div>
@@ -229,7 +233,11 @@ export default function StudentForm({ student, onClose, onSuccess }: StudentForm
                 className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               >
                 <option value="" disabled>Selecione...</option>
-                {turmas.map(t => <option key={t.id_turma} value={t.id_turma}>{t.turma}</option>)}
+                {Array.isArray(turmas) && turmas.length > 0 ? (
+                  turmas.map(t => <option key={t.id_turma} value={t.id_turma}>{t.turma}</option>)
+                ) : (
+                  <option disabled>Nenhuma turma disponível</option>
+                )}
               </select>
             </div>
             <div>
@@ -241,7 +249,11 @@ export default function StudentForm({ student, onClose, onSuccess }: StudentForm
                 className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg focus:ring-2 focus:ring-yellow-500"
               >
                 <option value="" disabled>Selecione...</option>
-                {encarregados.map(e => <option key={e.id_encarregados} value={e.id_encarregados}>{e.nome}</option>)}
+                {Array.isArray(encarregados) && encarregados.length > 0 ? (
+                  encarregados.map(e => <option key={e.id_encarregados} value={e.id_encarregados}>{e.nome}</option>)
+                ) : (
+                  <option disabled>Nenhum encarregado disponível</option>
+                )}
               </select>
             </div>
           </div>

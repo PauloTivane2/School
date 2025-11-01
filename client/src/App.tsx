@@ -1,6 +1,7 @@
 import React, { useState, Component } from 'react';
 import { Users, DollarSign, Menu, Calendar, X, Home, UserCheck, Award, Settings, LogOut, UserCog, BookOpen, TrendingUp, Bell } from 'lucide-react';
 import Dialog from './components/Dialog';
+import ForgotPassword from './pages/ForgotPasswordView';
 
 // Componentes
 import GuardiansView from './components/encarregadosList';
@@ -52,6 +53,7 @@ const App = () => {
   const [currentView, setCurrentView] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [notifications] = useState(3);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [dialog, setDialog] = useState<{
     isOpen: boolean;
     title: string;
@@ -143,6 +145,10 @@ const App = () => {
   };
 
 if (!user) {
+  if (showForgotPassword) {
+    return <ForgotPassword onBack={() => setShowForgotPassword(false)} />;
+  }
+
   return (
     <>
       <Dialog
@@ -154,7 +160,7 @@ if (!user) {
       />
       <Login
         onLoginSuccess={(username, password) => handleLoginSuccess(username, password)}
-        onForgotPassword={() => showDialog('Recuperar Senha', 'Entre em contato com o administrador do sistema para recuperar sua senha.', 'info')}
+        onForgotPassword={() => setShowForgotPassword(true)}
       />
     </>
   );

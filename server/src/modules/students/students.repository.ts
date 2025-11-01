@@ -281,4 +281,46 @@ export class StudentsRepository {
     );
     return result.rows;
   }
+
+  /**
+   * Buscar classes para dropdown
+   */
+  async getClassesDropdown(): Promise<{ id_classes: number; nome_classe: string }[]> {
+    const result = await pool.query(
+      'SELECT id_classes, nome_classe FROM classes ORDER BY nome_classe'
+    );
+    return result.rows;
+  }
+
+  /**
+   * Buscar turmas para dropdown (com filtro opcional por ano)
+   */
+  async getTurmasDropdown(ano?: number): Promise<{ id_turma: number; turma: string; ano: number; nome_classe: string }[]> {
+    let query = `
+      SELECT t.id_turma, t.turma, t.ano, c.nome_classe
+      FROM turmas t
+      LEFT JOIN classes c ON c.id_classes = t.id_classe
+    `;
+    const params: any[] = [];
+    
+    if (ano) {
+      query += ' WHERE t.ano = $1';
+      params.push(ano);
+    }
+    
+    query += ' ORDER BY t.ano DESC, c.nome_classe, t.turma';
+    
+    const result = await pool.query(query, params);
+    return result.rows;
+  }
+
+  /**
+   * Buscar encarregados para dropdown
+   */
+  async getEncarregadosDropdown(): Promise<{ id_encarregados: number; nome: string; email: string }[]> {
+    const result = await pool.query(
+      'SELECT id_encarregados, nome, email FROM encarregados ORDER BY nome'
+    );
+    return result.rows;
+  }
 }

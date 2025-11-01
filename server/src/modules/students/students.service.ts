@@ -151,4 +151,37 @@ export class StudentsService {
       throw new AppError('Erro ao buscar estudantes da turma', 500);
     }
   }
+
+  /**
+   * Buscar classes para dropdown
+   */
+  async getClassesDropdown() {
+    try {
+      return await this.repository.getClassesDropdown();
+    } catch (error) {
+      throw new AppError('Erro ao buscar classes', 500);
+    }
+  }
+
+  /**
+   * Buscar turmas para dropdown
+   */
+  async getTurmasDropdown(ano?: number) {
+    try {
+      return await this.repository.getTurmasDropdown(ano);
+    } catch (error) {
+      throw new AppError('Erro ao buscar turmas', 500);
+    }
+  }
+
+  /**
+   * Buscar encarregados para dropdown
+   */
+  async getEncarregadosDropdown() {
+    try {
+      return await this.repository.getEncarregadosDropdown();
+    } catch (error) {
+      throw new AppError('Erro ao buscar encarregados', 500);
+    }
+  }
 }
