@@ -1,8 +1,10 @@
 // frontend/src/components/admin/AdminDashboard.tsx
 import { useState, useEffect } from 'react';
-import { Settings, Edit, Trash2, Plus } from 'lucide-react';
+import { Settings, Edit, Trash2, Plus, Bell, Cog } from 'lucide-react';
 import ClasseForm from './classesView';
 import DisciplinasForm from './disciplinasView';
+import NotificationsView from './NotificationsView';
+import SettingsView from './SettingsView';
 
 
 interface Professor {
@@ -29,6 +31,7 @@ const AdminDashboard = () => {
   const [showClasseForm, setShowClasseForm] = useState(false);
   const [showDisciplinaForm, setShowDisciplinaForm] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [currentView, setCurrentView] = useState<'dashboard' | 'notifications' | 'settings'>('dashboard');
 
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [selectedClass, setSelectedClass] = useState<string>('');
@@ -90,6 +93,15 @@ const AdminDashboard = () => {
     );
   });
 
+  // Renderizar view baseada no estado
+  if (currentView === 'notifications') {
+    return <NotificationsView />;
+  }
+
+  if (currentView === 'settings') {
+    return <SettingsView />;
+  }
+
   return (
     <div className="space-y-6">
       {/* Cabeçalho */}
@@ -102,14 +114,64 @@ const AdminDashboard = () => {
             <p className="text-sm text-neutral-gray mt-1">Gerencie classes, disciplinas e professores</p>
           </div>
 
-          {/* Botão Definições */}
-          <button
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="btn-secondary flex items-center gap-2"
-            aria-label="Definições"
-          >
-            <Settings size={18} /> Definições
-          </button>
+          {/* Botão Definições com Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="btn-secondary flex items-center gap-2"
+              aria-label="Definições"
+            >
+              <Settings size={18} /> Definições
+            </button>
+
+            {/* Dropdown Menu */}
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-border-light z-50">
+                <div className="py-2">
+                  <button
+                    onClick={() => {
+                      setCurrentView('notifications');
+                      setDropdownOpen(false);
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-accent transition-all flex items-center gap-3"
+                  >
+                    <Bell size={18} className="text-primary" />
+                    <div>
+                      <p className="font-semibold text-text-primary">Notificações</p>
+                      <p className="text-xs text-neutral-gray">Ver alertas do sistema</p>
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setCurrentView('settings');
+                      setDropdownOpen(false);
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-accent transition-all flex items-center gap-3"
+                  >
+                    <Cog size={18} className="text-primary" />
+                    <div>
+                      <p className="font-semibold text-text-primary">Configurações</p>
+                      <p className="text-xs text-neutral-gray">Definições do sistema</p>
+                    </div>
+                  </button>
+                  {currentView !== 'dashboard' && (
+                    <>
+                      <div className="border-t border-border-light my-2"></div>
+                      <button
+                        onClick={() => {
+                          setCurrentView('dashboard');
+                          setDropdownOpen(false);
+                        }}
+                        className="w-full px-4 py-2 text-left hover:bg-accent transition-all text-primary font-medium"
+                      >
+                        ← Voltar ao Dashboard
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

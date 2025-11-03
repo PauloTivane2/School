@@ -18,6 +18,7 @@ import encarregadosRoutes from './encarregados';
 import disciplinasRoutes from './disciplinas.routes';
 import agendaRoutes from './agendaRoutes';
 import dropdownsRoutes from './dropdownsRoutes';
+import mpesaRoutes from './mpesa.routes';
 
 const router = Router();
 
@@ -47,6 +48,7 @@ router.use('/disciplinas', disciplinasRoutes);     // Disciplinas
 router.use('/agenda', agendaRoutes);               // Agenda
 router.use('/dropdowns', dropdownsRoutes);         // Dados para dropdowns
 router.use('/admin', adminRoutes);                 // RF20-RF21: Administração
+router.use('/mpesa', mpesaRoutes);                 // Pagamentos M-Pesa
 
 // Rota raiz da API
 router.get('/', (_req: Request, res: Response) => {

@@ -1,10 +1,12 @@
 // frontend/src/components/pagamentos/pagamentosList.tsx
 import { useState, useEffect } from 'react';
-import { DollarSign, Plus, Edit, Trash2, Search, Filter } from 'lucide-react';
+import { DollarSign, Plus, Edit, Trash2, Search, Filter, Smartphone } from 'lucide-react';
 import PaymentForm from '../pages/pagamentosView';
+import MpesaPayment from './MpesaPayment';
 
 interface Payment {
   id: number;
+  aluno_id?: number;
   aluno_nome: string;
   valor: number | string | null; // aceitar string também (só para robustez)
   metodo: string;
@@ -20,6 +22,8 @@ const PaymentsList = () => {
   const [editingPayment, setEditingPayment] = useState<Payment | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [showMpesaPayment, setShowMpesaPayment] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
 
   useEffect(() => {
     fetchPayments();
@@ -67,6 +71,24 @@ const PaymentsList = () => {
   const handleAdd = () => {
     setEditingPayment(null);
     setShowForm(true);
+  };
+
+  const handlePayWithMpesa = (payment: Payment) => {
+    setSelectedPayment(payment);
+    setShowMpesaPayment(true);
+  };
+
+  const handleMpesaSuccess = (transactionId: string) => {
+    console.log('✅ Pagamento M-Pesa iniciado:', transactionId);
+    alert(`Pagamento M-Pesa iniciado com sucesso!\n\nID da Transação: ${transactionId}\n\nVerifique seu telefone para confirmar o pagamento.`);
+    setShowMpesaPayment(false);
+    setSelectedPayment(null);
+    fetchPayments(); // Recarregar lista
+  };
+
+  const handleMpesaCancel = () => {
+    setShowMpesaPayment(false);
+    setSelectedPayment(null);
   };
 
   const toNumber = (v: number | string | null | undefined) => {
@@ -222,6 +244,17 @@ const PaymentsList = () => {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-center gap-2">
+                        {/* Botão Pagar com M-Pesa (apenas para pendentes) */}
+                        {p.estado === 'pendente' && (
+                          <button
+                            onClick={() => handlePayWithMpesa(p)}
+                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-all duration-150 flex items-center gap-1"
+                            title="Pagar com M-Pesa"
+                            aria-label="Pagar com M-Pesa"
+                          >
+                            <Smartphone size={16} />
+                          </button>
+                        )}
                         <button
                           onClick={() => handleEdit(p)}
                           className={`p-2 rounded-lg transition-all duration-150 ${
@@ -259,6 +292,21 @@ const PaymentsList = () => {
 
       {showForm && (
         <PaymentForm payment={editingPayment} onClose={handleCloseForm} onSuccess={fetchPayments} />
+      )}
+
+      {/* Modal de Pagamento M-Pesa */}
+      {showMpesaPayment && selectedPayment && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="relative max-w-md w-full">
+            <MpesaPayment
+              amount={toNumber(selectedPayment.valor)}
+              alunoId={selectedPayment.aluno_id}
+              pagamentoId={selectedPayment.id}
+              onSuccess={handleMpesaSuccess}
+              onCancel={handleMpesaCancel}
+            />
+          </div>
+        </div>
       )}
     </div>
   );
