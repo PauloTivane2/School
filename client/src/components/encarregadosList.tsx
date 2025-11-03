@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Edit, Trash2 } from 'lucide-react';
-import EncarregadoForm from '../pages/encarregadosView';
-import EncarregadoEditForm from '../pages/encarregadosEditView';  
+import { useState, useEffect } from "react";
+import { Edit, Trash2 } from "lucide-react";
+import { EncarregadosPage as EncarregadoForm } from "../pages/encarregados";
+import { EncarregadosEditPage as EncarregadoEditForm } from "../pages/encarregados";  
 
 export interface EncarregadoDetalhado {
   id: number;
@@ -31,9 +31,10 @@ const GuardiansView = () => {
     try {
       const res = await fetch('http://localhost:3000/api/encarregados');
       const data = await res.json();
-      setGuardians(data);
+      setGuardians(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Erro ao buscar encarregados:', err);
+      setGuardians([]);
     }
   };
 

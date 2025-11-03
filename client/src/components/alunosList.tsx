@@ -1,8 +1,8 @@
 // frontend/src/components/alunos/StudentsList.tsx
-import { useState, useEffect } from 'react';
-import { Edit, Trash2, Plus } from 'lucide-react';
-import StudentForm from '../pages/alunosView';
-import StudentEditForm from '../pages/alunosEditarView';
+import { useState, useEffect } from "react";
+import { Edit, Trash2, Plus } from "lucide-react";
+import { AlunosFormPage as StudentForm } from "../pages/alunos";
+import { AlunosEditPage as StudentEditForm } from "../pages/alunos";
 
 export interface Student {
   id: number;

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2 } from 'lucide-react';
-import FuncionarioForm from '../pages/funcionariosView';
-import FuncionarioEditForm from '../pages/funcionarioEditView';
+import { useState, useEffect } from "react";
+import { Plus, Edit, Trash2 } from "lucide-react";
+import { FuncionariosPage as FuncionarioForm } from "../pages/funcionarios";
+import { FuncionarioEditPage as FuncionarioEditForm } from "../pages/funcionarios";
 
 export interface Funcionario {
   id: number;

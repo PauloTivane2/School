@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { 
-  Settings, Save, Bell, Mail, Lock, User, Building, 
-  DollarSign, Calendar, FileText, Database, Shield, Globe, 
+  Settings, Save, Bell, Mail, Lock, Building, 
+  DollarSign, Shield, Globe, 
   Smartphone, CreditCard, Palette, Moon, Sun
 } from 'lucide-react';
-import ConfirmDialog from '../components/ConfirmDialog';
+import ConfirmDialog from '../../components/ConfirmDialog';
 
 export default function SettingsView() {
   const [activeTab, setActiveTab] = useState<'general' | 'notifications' | 'payments' | 'security' | 'appearance'>('general');

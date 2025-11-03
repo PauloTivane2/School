@@ -1,10 +1,10 @@
 // frontend/src/components/admin/AdminDashboard.tsx
 import { useState, useEffect } from 'react';
 import { Settings, Edit, Trash2, Plus, Bell, Cog } from 'lucide-react';
-import ClasseForm from './classesView';
-import DisciplinasForm from './disciplinasView';
-import NotificationsView from './NotificationsView';
-import SettingsView from './SettingsView';
+import { ClassesFormPage as ClasseForm } from '../turmas';
+import { DisciplinasFormPage as DisciplinasForm } from '../turmas';
+import { NotificationsPage as NotificationsView } from '../notifications';
+import { SettingsPage as SettingsView } from '../settings';
 
 
 interface Professor {

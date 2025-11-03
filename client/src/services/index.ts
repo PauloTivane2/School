@@ -64,3 +64,28 @@ export interface Exam {
   status: 'pending' | 'paid' | 'registered';
   subjects: string[];
 }
+
+// Service exports - ADDED 2025-11-03
+import api from './api';
+import authService from './auth';
+import studentsService from './students';
+import guardiansService from './guardians';
+import paymentService from './payments';
+import staffService from './staff';
+import dashboardService from './dashboard';
+import horariosService from './horarios';
+import examesService from './exames';
+import relatoriosService from './relatorios';
+
+export {
+  api,
+  authService,
+  studentsService,
+  guardiansService,
+  paymentService,
+  staffService,
+  dashboardService,
+  horariosService,
+  examesService,
+  relatoriosService
+};

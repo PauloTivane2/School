@@ -1,8 +1,7 @@
 // frontend/src/components/professores/ProfessorDashboard.tsx
 import { useState, useEffect } from 'react';
-import { Settings, Edit, Trash2, Plus } from 'lucide-react';
-import ClasseForm from './classesView';
-import DisciplinasForm from './disciplinasView';
+import { Edit, Trash2, Plus, Settings } from 'lucide-react';
+import { ClassesFormPage as ClasseForm, DisciplinasFormPage as DisciplinasForm } from '../turmas';
 
 interface Professor {
   id: number;

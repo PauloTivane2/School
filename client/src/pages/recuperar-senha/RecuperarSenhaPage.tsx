@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ArrowLeft, Mail, Lock, CheckCircle } from 'lucide-react';
-import Dialog from '../components/Dialog';
-import api from '../services/api';
+import Dialog from '../../components/Dialog';
+import api from '../../services/api';
 
 interface ForgotPasswordProps {
   onBack: () => void;

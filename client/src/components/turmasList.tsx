@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Edit, Trash2 } from 'lucide-react';
-import TurmaForm from '../pages/turmasView';  
+import { useState, useEffect } from "react";
+import { Edit, Trash2 } from "lucide-react";
+import { TurmasPage as TurmaForm } from "../pages/turmas";  
 
 export interface Turma {
   id_turma: number;

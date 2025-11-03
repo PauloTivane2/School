@@ -1,7 +1,6 @@
 import React, { useState, Component } from 'react';
 import { Users, DollarSign, Menu, Calendar, X, Home, UserCheck, Award, Settings, LogOut, UserCog, BookOpen, TrendingUp, Bell } from 'lucide-react';
 import Dialog from './components/Dialog';
-import ForgotPassword from './pages/ForgotPasswordView';
 
 // Componentes
 import GuardiansView from './components/encarregadosList';
@@ -13,13 +12,20 @@ import StudentsView from './components/alunosList';
 import PaymentsList from './components/pagamentosList';
 import AgendaPage from './components/agendaList';
 
-// Pages
-import AdminDashboard from './pages/AdminDashboard';
-import ProfessoresDashboardList from './pages/professoresDashboardList';
-import Login from './pages/loginView';
+// Pages - Organizadas
+import { LoginPage as Login } from './pages/login';
+import { RecuperarSenhaPage as ForgotPassword } from './pages/recuperar-senha';
+import { AdminDashboardPage as AdminDashboard } from './pages/dashboard';
+import { ProfessoresDashboardPage as ProfessoresDashboardList } from './pages/dashboard';
+import { HorariosPage } from './pages/horarios';
+import { ExamesPage } from './pages/exames';
+import { RelatoriosPage } from './pages/relatorios';
+import { PerfilPage } from './pages/perfil';
+import { SettingsPage } from './pages/settings';
+import { NotificationsPage } from './pages/notifications';
 
 // Services
-import authService from './services/authService';  
+import authService from './services/auth';  
 
 
 // ErrorBoundary
@@ -68,12 +74,16 @@ const App = () => {
       return [
         { id: 'dashboard', icon: Home, label: 'Dashboard' },
         { id: 'students', icon: Users, label: 'Alunos' },
-        { id: 'payments', icon: DollarSign, label: 'Pagamentos' },
-        { id: 'attendance', icon: UserCheck, label: 'Presenças' },
-        { id: 'grades', icon: Award, label: 'Notas' },
         { id: 'guardians', icon: UserCog, label: 'Encarregados' },
         { id: 'classes', icon: BookOpen, label: 'Turmas' },
-        { id: 'funcionarios', icon: TrendingUp, label: 'Funcionários' },
+        { id: 'horarios', icon: Calendar, label: 'Horários' },
+        { id: 'payments', icon: DollarSign, label: 'Financeiro' },
+        { id: 'attendance', icon: UserCheck, label: 'Presenças' },
+        { id: 'grades', icon: Award, label: 'Notas' },
+        { id: 'exames', icon: Award, label: 'Exames' },
+        { id: 'reports', icon: TrendingUp, label: 'Relatórios' },
+        { id: 'funcionarios', icon: Users, label: 'Funcionários' },
+        { id: 'perfil', icon: Settings, label: 'Perfil' },
       ];
     } else if (user.role === 'Professor') {
       return [
@@ -103,8 +113,9 @@ const App = () => {
       if (result.token && result.user) {
         // Mapear a função do usuário para o role esperado
         const role = (result.user.funcao === 'Admin' || result.user.funcao === 'Diretor') ? 'Admin' : 'Professor';
+        const userName = (result.user.nome || result.user.nome_funcionario || 'Usuário') as string;
         setUser({ 
-          name: result.user.nome || result.user.nome_funcionario, 
+          name: userName, 
           role 
         });
         setCurrentView('dashboard');
@@ -131,15 +142,19 @@ const App = () => {
     switch(currentView) {
       case 'dashboard': return user.role === 'Admin' ? <AdminDashboard /> : <ProfessoresDashboardList />;
       case 'students': return <StudentsView />;
+      case 'guardians': return <GuardiansView />;
+      case 'classes': return <TurmasList />;
+      case 'horarios': return <HorariosPage />;
       case 'payments': return <PaymentsList />;
       case 'attendance': return <AttendanceList />;
       case 'grades': return <GradesList />;
-      case 'classes': return <TurmasList />;
+      case 'exames': return <ExamesPage />;
+      case 'reports': return <RelatoriosPage />;
       case 'funcionarios': return <FuncionariosList />;
-      case 'guardians': return <GuardiansView />;
-      case 'reports': return <div>Relatórios (imprimir pautas, presenças)</div>;
+      case 'perfil': return <PerfilPage />;
       case 'agenda': return <AgendaPage />;
-      case 'settings': return <div>Configurações (alterar senha, tema, idioma)</div>;
+      case 'settings': return <SettingsPage />;
+      case 'notifications': return <NotificationsPage />;
       default: return user.role === 'Admin' ? <AdminDashboard /> : <ProfessoresDashboardList />;
     }
   };

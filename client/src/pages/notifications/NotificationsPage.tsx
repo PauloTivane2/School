@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, Check, Trash2, Filter, Mail, X, DollarSign, Calendar, MessageSquare, AlertCircle } from 'lucide-react';
-import ConfirmDialogPro from '../components/ConfirmDialogPro';
+import ConfirmDialog from '../../components/ConfirmDialog';
 
 interface Notification {
   id: number;
@@ -185,7 +185,7 @@ export default function NotificationsViewPro() {
 
   return (
     <>
-      <ConfirmDialogPro
+      <ConfirmDialog
         isOpen={dialog.isOpen}
         title={dialog.title}
         message={dialog.message}

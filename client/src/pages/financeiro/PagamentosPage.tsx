@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import { X, Save, Smartphone } from 'lucide-react';
-import MpesaPayment from '../components/MpesaPayment';
-import ConfirmDialog from '../components/ConfirmDialog';
-import mpesaLogo from '../assets/images/mpesa.png';
-import visaLogo from '../assets/images/visa.svg';
-import paypalLogo from '../assets/images/paypal.svg';
+import { useState, useEffect } from "react";
+import { X, Save, Smartphone } from "lucide-react";
+import MpesaPayment from "../../components/MpesaPayment";
+import ConfirmDialog from "../../components/ConfirmDialog";
+import mpesaLogo from "../../assets/images/mpesa.png";
+import visaLogo from "../../assets/images/visa.svg";
+import paypalLogo from "../../assets/images/paypal.svg";
 import {
   validateAmount,
   validateMpesaNumber,
@@ -16,7 +16,7 @@ import {
   validateStudent,
   validatePaymentMethod,
   formatCardNumber
-} from '../utils/validations';
+} from '../../utils/validations';
 
 interface Payment {
   id?: number;

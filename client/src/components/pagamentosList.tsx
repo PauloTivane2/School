@@ -1,8 +1,8 @@
 // frontend/src/components/pagamentos/pagamentosList.tsx
-import { useState, useEffect } from 'react';
-import { DollarSign, Plus, Edit, Trash2, Search, Filter, Smartphone } from 'lucide-react';
-import PaymentForm from '../pages/pagamentosView';
-import MpesaPayment from './MpesaPayment';
+import { useState, useEffect } from "react";
+import { DollarSign, Plus, Edit, Trash2, Search, Filter, Smartphone } from "lucide-react";
+import { PagamentosPage as PaymentForm } from "../pages/financeiro";
+import MpesaPayment from "./MpesaPayment";
 
 interface Payment {
   id: number;
