@@ -262,3 +262,5 @@ npm run dev
 ## 📄 Licença
 
 Este projeto é privado e de uso interno.
+#   S c h o o l  
+ 
