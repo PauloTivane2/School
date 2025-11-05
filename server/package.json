@@ -15,6 +15,7 @@
         "lint": "eslint src --ext .ts"
     },
     "dependencies": {
+        "@types/pdfkit": "^0.17.3",
         "axios": "^1.13.1",
         "bcryptjs": "^3.0.2",
         "cors": "^2.8.5",
@@ -24,6 +25,7 @@
         "helmet": "^8.1.0",
         "jsonwebtoken": "^9.0.2",
         "morgan": "^1.10.1",
+        "pdfkit": "^0.17.2",
         "pg": "^8.11.0"
     },
     "devDependencies": {

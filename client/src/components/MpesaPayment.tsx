@@ -8,7 +8,6 @@ import paypalLogo from '../assets/images/paypal.svg';
 interface MpesaPaymentProps {
   amount: number;
   alunoId?: number;
-  pagamentoId?: number;
   onSuccess?: (transactionId: string) => void;
   onCancel?: () => void;
 }
@@ -22,7 +21,6 @@ interface Wallet {
 export default function MpesaPayment({ 
   amount, 
   alunoId, 
-  pagamentoId,
   onSuccess, 
   onCancel 
 }: MpesaPaymentProps) {
@@ -51,7 +49,9 @@ export default function MpesaPayment({
 
   // Carregar carteiras M-Pesa
   useEffect(() => {
+    console.log('🔄 useEffect chamado. paymentMethod:', paymentMethod);
     if (paymentMethod === 'mpesa') {
+      console.log('📱 Método M-Pesa selecionado, carregando carteiras...');
       loadWallets();
     }
   }, [paymentMethod]);
@@ -59,23 +59,40 @@ export default function MpesaPayment({
   const loadWallets = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/mpesa/wallets', {
+      console.log('🔑 Token:', token ? 'Existe' : 'Não existe');
+      
+      const response = await fetch('/api/guardians/pagamento/carteiras', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
 
+      console.log('📡 Response status:', response.status);
+      
       if (response.ok) {
         const data = await response.json();
-        if (data.success && data.data) {
-          setWallets(data.data);
-          if (data.data.length > 0) {
-            setSelectedWallet(data.data[0].id);
-          }
+        console.log('📦 Dados completos recebidos:', data);
+        console.log('📦 data.data:', data.data);
+        console.log('📦 data.success:', data.success);
+        
+        // A resposta vem em data.data (do ApiResponse)
+        const walletsList = data.data || [];
+        console.log('💼 Lista de carteiras:', walletsList);
+        
+        if (walletsList.length > 0) {
+          setWallets(walletsList);
+          setSelectedWallet(walletsList[0].id);
+          console.log('✅ Carteiras carregadas com sucesso:', walletsList);
+          console.log('✅ Primeira carteira selecionada:', walletsList[0].id);
+        } else {
+          console.warn('⚠️ Array de carteiras vazio');
         }
+      } else {
+        const errorText = await response.text();
+        console.error('❌ Erro HTTP:', response.status, errorText);
       }
     } catch (error) {
-      console.error('Erro ao carregar carteiras:', error);
+      console.error('❌ Exceção ao carregar carteiras:', error);
     }
   };
 
@@ -110,33 +127,33 @@ export default function MpesaPayment({
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/mpesa/payment', {
+      const response = await fetch('/api/guardians/pagamento/mpesa', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-          aluno_id: alunoId,
-          pagamento_id: pagamentoId,
+          studentId: alunoId,
           amount: amount,
           msisdn: msisdn,
           walletId: selectedWallet,
-          reference: `PAY-${alunoId || Date.now()}`
+          reference: `MENSALIDADE-${alunoId || Date.now()}`
         })
       });
 
       const data = await response.json();
 
       if (data.success) {
-        setTransactionId(data.data.transaction_id);
+        const txId = data.data?.transaction_id || data.data?.data?.transaction_id;
+        setTransactionId(txId);
         setStep('success');
         
         if (onSuccess) {
-          onSuccess(data.data.transaction_id);
+          onSuccess(txId);
         }
       } else {
-        setErrorMessage(data.error?.message || 'Erro ao processar pagamento');
+        setErrorMessage(data.message || 'Erro ao processar pagamento');
         setStep('error');
       }
     } catch (error: any) {
@@ -245,9 +262,9 @@ export default function MpesaPayment({
             </div>
 
             {/* Carteira */}
-            {wallets.length > 0 && (
-              <div>
-                <label className="block mb-2 text-sm font-medium">Carteira</label>
+            <div>
+              <label className="block mb-2 text-sm font-medium">Carteira M-Pesa</label>
+              {wallets.length > 0 ? (
                 <select
                   value={selectedWallet}
                   onChange={(e) => setSelectedWallet(e.target.value)}
@@ -259,8 +276,14 @@ export default function MpesaPayment({
                     </option>
                   ))}
                 </select>
-              </div>
-            )}
+              ) : (
+                <div className="p-3 bg-warning-light border border-warning rounded-lg">
+                  <p className="text-sm text-warning">
+                    ⚠️ Nenhuma carteira M-Pesa configurada. Entre em contacto com o administrador.
+                  </p>
+                </div>
+              )}
+            </div>
 
             {/* Número de Telefone */}
             <div>

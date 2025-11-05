@@ -1,13 +1,13 @@
 import React, { useState, Component } from 'react';
-import { Users, DollarSign, Menu, Calendar, X, Home, UserCheck, Award, Settings, LogOut, UserCog, BookOpen, TrendingUp, Bell } from 'lucide-react';
+import { Users, DollarSign, Menu, Calendar, X, Home, UserCheck, Award, Settings, LogOut, UserCog, BookOpen, TrendingUp, Bell, MessageSquare, Download } from 'lucide-react';
 import Dialog from './components/Dialog';
 
 // Componentes
 import GuardiansView from './components/encarregadosList';
-import AttendanceList from './components/presencasList';
+import { PresencasPage } from './pages/presencas';
 import GradesList from './components/notasList';
 import TurmasList from './components/turmasList';
-import FuncionariosList from './components/funcionariosList';
+import FuncionariosMainPage from './pages/funcionarios/FuncionariosMainPage';
 import StudentsView from './components/alunosList';
 import PaymentsList from './components/pagamentosList';
 import AgendaPage from './components/agendaList';
@@ -15,8 +15,12 @@ import AgendaPage from './components/agendaList';
 // Pages - Organizadas
 import { LoginPage as Login } from './pages/login';
 import { RecuperarSenhaPage as ForgotPassword } from './pages/recuperar-senha';
-import { AdminDashboardPage as AdminDashboard } from './pages/dashboard';
+import AdminDashboard from './pages/dashboard/AdminDashboard';
 import { ProfessoresDashboardPage as ProfessoresDashboardList } from './pages/dashboard';
+import EncarregadoDashboard from './pages/dashboard/EncarregadoDashboard';
+import EncarregadoNotifications from './pages/encarregado/EncarregadoNotifications';
+import EncarregadoReclamacoes from './pages/encarregado/EncarregadoReclamacoes';
+import EncarregadoExportar from './pages/encarregado/EncarregadoExportar';
 import { HorariosPage } from './pages/horarios';
 import { ExamesPage } from './pages/exames';
 import { RelatoriosPage } from './pages/relatorios';
@@ -54,8 +58,51 @@ class ErrorBoundary extends Component<{children: React.ReactNode}, {hasError: bo
   }
 }
 
+const AcademicSection = () => {
+  const [tab, setTab] = useState<'turmas' | 'horarios' | 'presencas' | 'notas'>('turmas');
+  const baseBtn = 'px-4 py-2 rounded-lg text-sm font-medium transition-colors';
+  const active = 'bg-primary text-white';
+  const inactive = 'bg-white border border-border-light text-text-primary hover:bg-accent';
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-2">
+        <button
+          onClick={() => setTab('turmas')}
+          className={`${baseBtn} ${tab === 'turmas' ? active : inactive}`}
+        >
+          Turmas
+        </button>
+        <button
+          onClick={() => setTab('horarios')}
+          className={`${baseBtn} ${tab === 'horarios' ? active : inactive}`}
+        >
+          Horários
+        </button>
+        <button
+          onClick={() => setTab('presencas')}
+          className={`${baseBtn} ${tab === 'presencas' ? active : inactive}`}
+        >
+          Presenças
+        </button>
+        <button
+          onClick={() => setTab('notas')}
+          className={`${baseBtn} ${tab === 'notas' ? active : inactive}`}
+        >
+          Notas
+        </button>
+      </div>
+      <div>
+        {tab === 'turmas' && <TurmasList />}
+        {tab === 'horarios' && <HorariosPage />}
+        {tab === 'presencas' && <PresencasPage />}
+        {tab === 'notas' && <GradesList />}
+      </div>
+    </div>
+  );
+};
+
 const App = () => {
-  const [user, setUser] = useState<{name: string, role: 'Admin' | 'Professor'} | null>(null);
+  const [user, setUser] = useState<{name: string, role: 'Admin' | 'Professor' | 'Encarregado' | 'Tesouraria'} | null>(null);
   const [currentView, setCurrentView] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [notifications] = useState(3);
@@ -75,11 +122,8 @@ const App = () => {
         { id: 'dashboard', icon: Home, label: 'Dashboard' },
         { id: 'students', icon: Users, label: 'Alunos' },
         { id: 'guardians', icon: UserCog, label: 'Encarregados' },
-        { id: 'classes', icon: BookOpen, label: 'Turmas' },
-        { id: 'horarios', icon: Calendar, label: 'Horários' },
+        { id: 'academico', icon: BookOpen, label: 'Académico' },
         { id: 'payments', icon: DollarSign, label: 'Financeiro' },
-        { id: 'attendance', icon: UserCheck, label: 'Presenças' },
-        { id: 'grades', icon: Award, label: 'Notas' },
         { id: 'exames', icon: Award, label: 'Exames' },
         { id: 'reports', icon: TrendingUp, label: 'Relatórios' },
         { id: 'funcionarios', icon: Users, label: 'Funcionários' },
@@ -93,6 +137,21 @@ const App = () => {
         { id: 'reports', icon: BookOpen, label: 'Relatórios' },
         { id: 'agenda', icon: Calendar, label: 'Agenda' },
         { id: 'settings', icon: Settings, label: 'Configurações' },
+      ];
+    } else if (user.role === 'Encarregado') {
+      return [
+        { id: 'dashboard', icon: Home, label: 'Meus Educandos' },
+        { id: 'notifications', icon: Bell, label: 'Notificações' },
+        { id: 'reclamacoes', icon: MessageSquare, label: 'Reclamações' },
+        { id: 'exportar', icon: Download, label: 'Exportar Dados' },
+        { id: 'perfil', icon: Settings, label: 'Perfil' },
+      ];
+    } else if (user.role === 'Tesouraria') {
+      return [
+        { id: 'dashboard', icon: Home, label: 'Dashboard' },
+        { id: 'payments', icon: DollarSign, label: 'Financeiro' },
+        { id: 'reports', icon: TrendingUp, label: 'Relatórios' },
+        { id: 'perfil', icon: Settings, label: 'Perfil' },
       ];
     }
     return [];
@@ -112,7 +171,18 @@ const App = () => {
       
       if (result.token && result.user) {
         // Mapear a função do usuário para o role esperado
-        const role = (result.user.funcao === 'Admin' || result.user.funcao === 'Diretor') ? 'Admin' : 'Professor';
+        let role: 'Admin' | 'Professor' | 'Encarregado' | 'Tesouraria' = 'Professor';
+        
+        if (result.user.funcao === 'Admin' || result.user.funcao === 'Diretor' || result.user.funcao === 'Secretaria') {
+          role = 'Admin';
+        } else if (result.user.funcao === 'Encarregado') {
+          role = 'Encarregado';
+        } else if (result.user.funcao === 'Tesouraria') {
+          role = 'Tesouraria';
+        } else {
+          role = 'Professor';
+        }
+        
         const userName = (result.user.nome || result.user.nome_funcionario || 'Usuário') as string;
         setUser({ 
           name: userName, 
@@ -140,22 +210,32 @@ const App = () => {
     if (!user) return null;
 
     switch(currentView) {
-      case 'dashboard': return user.role === 'Admin' ? <AdminDashboard /> : <ProfessoresDashboardList />;
+      case 'dashboard': 
+        if (user.role === 'Admin') return <AdminDashboard />;
+        if (user.role === 'Encarregado') return <EncarregadoDashboard />;
+        return <ProfessoresDashboardList />;
       case 'students': return <StudentsView />;
       case 'guardians': return <GuardiansView />;
       case 'classes': return <TurmasList />;
       case 'horarios': return <HorariosPage />;
       case 'payments': return <PaymentsList />;
-      case 'attendance': return <AttendanceList />;
+      case 'attendance': return <PresencasPage />;
       case 'grades': return <GradesList />;
+      case 'academico': return <AcademicSection />;
       case 'exames': return <ExamesPage />;
       case 'reports': return <RelatoriosPage />;
-      case 'funcionarios': return <FuncionariosList />;
+      case 'funcionarios': return <FuncionariosMainPage />;
       case 'perfil': return <PerfilPage />;
       case 'agenda': return <AgendaPage />;
       case 'settings': return <SettingsPage />;
-      case 'notifications': return <NotificationsPage />;
-      default: return user.role === 'Admin' ? <AdminDashboard /> : <ProfessoresDashboardList />;
+      case 'notifications': 
+        return user.role === 'Encarregado' ? <EncarregadoNotifications /> : <NotificationsPage />;
+      case 'reclamacoes': return <EncarregadoReclamacoes />;
+      case 'exportar': return <EncarregadoExportar />;
+      default: 
+        if (user.role === 'Admin') return <AdminDashboard />;
+        if (user.role === 'Encarregado') return <EncarregadoDashboard />;
+        return <ProfessoresDashboardList />;
     }
   };
 
@@ -236,6 +316,7 @@ if (!user) {
               </div>
               <div className="flex items-center gap-4">
                 <button 
+                  onClick={() => setCurrentView('notifications')}
                   className="relative p-2 hover:bg-accent rounded-lg transition-all duration-150"
                   aria-label="Notificações"
                 >

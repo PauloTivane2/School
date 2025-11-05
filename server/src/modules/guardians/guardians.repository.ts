@@ -317,4 +317,196 @@ export class GuardiansRepository {
     const result = await pool.query(query, params);
     return parseInt(result.rows[0].total);
   }
+
+  /**
+   * Obter alunos de um encarregado específico
+   * RN: Encarregado só vê seus próprios educandos
+   */
+  async getGuardianStudents(guardianId: number): Promise<any[]> {
+    const query = `
+      SELECT DISTINCT
+        a.id_aluno,
+        a.nome_aluno as nome,
+        a.data_nascimento,
+        a.genero,
+        a.estado,
+        t.turma as nome_turma,
+        c.nome_classe as classe
+      FROM alunos a
+      LEFT JOIN turmas t ON a.id_turma = t.id_turma
+      LEFT JOIN classes c ON t.id_classe = c.id_classes
+      WHERE a.id_encarregados = $1
+      ORDER BY a.nome_aluno
+    `;
+
+    const result = await pool.query(query, [guardianId]);
+    return result.rows;
+  }
+
+  /**
+   * Obter dashboard do encarregado
+   */
+  async getGuardianDashboard(guardianId: number): Promise<any> {
+    // Buscar alunos
+    const students = await this.getGuardianStudents(guardianId);
+
+    // Buscar estatísticas resumidas
+    const statsQuery = `
+      SELECT 
+        COUNT(DISTINCT a.id_aluno) as total_alunos,
+        COUNT(DISTINCT CASE WHEN p.estado = 'pendente' THEN p.id END) as pagamentos_pendentes,
+        AVG(n.valor) as media_geral,
+        SUM(CASE WHEN pr.presente = FALSE THEN 1 ELSE 0 END) as total_faltas
+      FROM alunos a
+      LEFT JOIN pagamentos p ON a.id_aluno = p.aluno_id
+      LEFT JOIN notas n ON a.id_aluno = n.aluno_id
+      LEFT JOIN presencas pr ON a.id_aluno = pr.aluno_id
+      WHERE a.id_encarregados = $1
+    `;
+
+    const statsResult = await pool.query(statsQuery, [guardianId]);
+    const stats = statsResult.rows[0];
+
+    // Buscar alertas (pagamentos atrasados, faltas excessivas, notas baixas)
+    const alertsQuery = `
+      SELECT DISTINCT
+        'pagamento' as tipo,
+        a.nome_aluno as aluno_nome,
+        'Pagamento pendente' as mensagem,
+        p.data_pagamento as data
+      FROM alunos a
+      JOIN pagamentos p ON a.id_aluno = p.aluno_id
+      WHERE a.id_encarregados = $1 AND p.estado = 'pendente'
+      
+      UNION ALL
+      
+      SELECT DISTINCT
+        'falta' as tipo,
+        a.nome_aluno as aluno_nome,
+        'Faltas excessivas (' || COUNT(pr.id) || ' faltas)' as mensagem,
+        MAX(pr.data) as data
+      FROM alunos a
+      JOIN presencas pr ON a.id_aluno = pr.aluno_id
+      WHERE a.id_encarregados = $1 AND pr.presente = FALSE
+      GROUP BY a.id_aluno, a.nome_aluno
+      HAVING COUNT(pr.id) >= 5
+      
+      UNION ALL
+      
+      SELECT DISTINCT
+        'nota' as tipo,
+        a.nome_aluno as aluno_nome,
+        'Nota baixa (' || n.valor || ')' as mensagem,
+        av.data as data
+      FROM alunos a
+      JOIN notas n ON a.id_aluno = n.aluno_id
+      JOIN avaliacoes av ON n.avaliacao_id = av.id
+      WHERE a.id_encarregados = $1 AND n.valor < 10
+      
+      ORDER BY data DESC
+      LIMIT 10
+    `;
+
+    const alertsResult = await pool.query(alertsQuery, [guardianId]);
+
+    return {
+      students,
+      stats: {
+        total_alunos: parseInt(stats.total_alunos) || 0,
+        pagamentos_pendentes: parseInt(stats.pagamentos_pendentes) || 0,
+        media_geral: parseFloat(stats.media_geral) || 0,
+        total_faltas: parseInt(stats.total_faltas) || 0,
+      },
+      alerts: alertsResult.rows,
+    };
+  }
+
+  /**
+   * Verificar se um aluno pertence ao encarregado
+   */
+  async isStudentOwnedByGuardian(guardianId: number, studentId: number): Promise<boolean> {
+    const query = `
+      SELECT COUNT(*) as count
+      FROM alunos
+      WHERE id_aluno = $1 AND id_encarregados = $2
+    `;
+
+    const result = await pool.query(query, [studentId, guardianId]);
+    return parseInt(result.rows[0].count) > 0;
+  }
+
+  /**
+   * Obter notas de um aluno
+   */
+  async getStudentGrades(studentId: number): Promise<any[]> {
+    const query = `
+      SELECT 
+        n.id,
+        n.valor as nota,
+        n.trimestre,
+        av.data as data_lancamento,
+        av.tipo as tipo_avaliacao,
+        f.nome_funcionario as professor_nome
+      FROM notas nö
+      JOIN avaliacoes av ON n.avaliacao_id = av.id
+      LEFT JOIN funcionarios f ON n.avaliador_id = f.id_funcionarios
+      WHERE n.aluno_id = $1
+      ORDER BY n.trimestre, av.data
+    `;
+
+    const result = await pool.query(query, [studentId]);
+    return result.rows;
+  }
+
+  /**
+   * Obter presenças de um aluno
+   */
+  async getStudentAttendance(studentId: number): Promise<any[]> {
+    const query = `
+      SELECT 
+        pr.id,
+        pr.data,
+        pr.presente,
+        pr.observacao,
+        c.nome_classe
+      FROM presencas pr
+      LEFT JOIN classes c ON pr.classe_id = c.id_classes
+      WHERE pr.aluno_id = $1
+      ORDER BY pr.data DESC
+      LIMIT 100
+    `;
+
+    const result = await pool.query(query, [studentId]);
+    return result.rows;
+  }
+
+  /**
+   * Obter pagamentos de um aluno
+   */
+  async getStudentPayments(studentId: number): Promise<any[]> {
+    const query = `
+      SELECT 
+        p.id,
+        p.valor,
+        p.data_pagamento,
+        p.estado,
+        p.metodo,
+        p.referencia
+      FROM pagamentos p
+      WHERE p.aluno_id = $1
+      ORDER BY p.data_pagamento DESC
+    `;
+
+    const result = await pool.query(query, [studentId]);
+    return result.rows;
+  }
+
+  /**
+   * Obter exames de um aluno
+   */
+  async getStudentExams(studentId: number): Promise<any[]> {
+    // Sistema não possui módulo de exames
+    // Retornar array vazio por enquanto
+    return [];
+  }
 }

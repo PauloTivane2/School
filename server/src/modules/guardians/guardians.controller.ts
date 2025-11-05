@@ -79,4 +79,167 @@ export class GuardiansController {
     const total = await this.service.count({ q: q as string });
     return ApiResponse.success(res, { total }, 'Contagem realizada com sucesso');
   });
+
+  /**
+   * GET /api/guardians/meus-alunos
+   * Listar APENAS os alunos do encarregado logado
+   * RN: Encarregado só vê seus próprios educandos
+   */
+  getMyStudents = asyncHandler(async (req: Request, res: Response) => {
+    const guardianId = (req as any).user?.userId;
+    
+    if (!guardianId) {
+      return ApiResponse.error(res, 'Usuário não identificado', 401);
+    }
+
+    const students = await this.service.getGuardianStudents(guardianId);
+    return ApiResponse.success(res, students, 'Alunos do encarregado listados com sucesso');
+  });
+
+  /**
+   * GET /api/guardians/dashboard
+   * Dashboard personalizado do encarregado
+   * Contém: resumo dos alunos, alertas, próximos eventos
+   */
+  getDashboard = asyncHandler(async (req: Request, res: Response) => {
+    const guardianId = (req as any).user?.userId;
+    
+    if (!guardianId) {
+      return ApiResponse.error(res, 'Usuário não identificado', 401);
+    }
+
+    const dashboard = await this.service.getGuardianDashboard(guardianId);
+    return ApiResponse.success(res, dashboard, 'Dashboard do encarregado carregado com sucesso');
+  });
+
+  /**
+   * GET /api/guardians/aluno/:studentId/notas
+   * Ver notas de um aluno específico (apenas se for seu educando)
+   */
+  getStudentGrades = asyncHandler(async (req: Request, res: Response) => {
+    const guardianId = (req as any).user?.userId;
+    const { studentId } = req.params;
+    
+    if (!guardianId) {
+      return ApiResponse.error(res, 'Usuário não identificado', 401);
+    }
+
+    const grades = await this.service.getStudentGrades(guardianId, Number(studentId));
+    return ApiResponse.success(res, grades, 'Notas do aluno carregadas com sucesso');
+  });
+
+  /**
+   * GET /api/guardians/aluno/:studentId/presencas
+   * Ver presenças de um aluno específico (apenas se for seu educando)
+   */
+  getStudentAttendance = asyncHandler(async (req: Request, res: Response) => {
+    const guardianId = (req as any).user?.userId;
+    const { studentId } = req.params;
+    
+    if (!guardianId) {
+      return ApiResponse.error(res, 'Usuário não identificado', 401);
+    }
+
+    const attendance = await this.service.getStudentAttendance(guardianId, Number(studentId));
+    return ApiResponse.success(res, attendance, 'Presenças do aluno carregadas com sucesso');
+  });
+
+  /**
+   * GET /api/guardians/aluno/:studentId/pagamentos
+   * Ver pagamentos de um aluno específico (apenas se for seu educando)
+   */
+  getStudentPayments = asyncHandler(async (req: Request, res: Response) => {
+    const guardianId = (req as any).user?.userId;
+    const { studentId } = req.params;
+    
+    if (!guardianId) {
+      return ApiResponse.error(res, 'Usuário não identificado', 401);
+    }
+
+    const payments = await this.service.getStudentPayments(guardianId, Number(studentId));
+    return ApiResponse.success(res, payments, 'Pagamentos do aluno carregados com sucesso');
+  });
+
+  /**
+   * GET /api/guardians/aluno/:studentId/exames
+   * Ver exames de um aluno específico (apenas se for seu educando)
+   */
+  getStudentExams = asyncHandler(async (req: Request, res: Response) => {
+    const guardianId = (req as any).user?.userId;
+    const { studentId } = req.params;
+    
+    if (!guardianId) {
+      return ApiResponse.error(res, 'Usuário não identificado', 401);
+    }
+
+    const exams = await this.service.getStudentExams(guardianId, Number(studentId));
+    return ApiResponse.success(res, exams, 'Exames do aluno carregados com sucesso');
+  });
+
+  /**
+   * POST /api/guardians/aluno/:studentId/exportar
+   * Exportar relatório de um aluno em PDF
+   */
+  exportStudentReport = asyncHandler(async (req: Request, res: Response) => {
+    const guardianId = (req as any).user?.userId;
+    const { studentId } = req.params;
+    const { type } = req.body; // 'completo', 'presencas', 'pagamentos'
+    
+    if (!guardianId) {
+      return ApiResponse.error(res, 'Usuário não identificado', 401);
+    }
+
+    await this.service.exportStudentReport(guardianId, Number(studentId), type, res);
+  });
+
+  /**
+   * POST /api/guardians/pagamento/mpesa
+   * Processar pagamento M-Pesa para mensalidade de aluno
+   */
+  processMpesaPayment = asyncHandler(async (req: Request, res: Response) => {
+    const guardianId = (req as any).user?.userId;
+    const { studentId, amount, msisdn, walletId, reference } = req.body;
+    
+    if (!guardianId) {
+      return ApiResponse.error(res, 'Usuário não identificado', 401);
+    }
+
+    const result = await this.service.processMpesaPayment(
+      guardianId,
+      Number(studentId),
+      amount,
+      msisdn,
+      walletId,
+      reference
+    );
+    
+    if (result.success) {
+      return ApiResponse.success(res, result.data, 'Pagamento processado com sucesso');
+    } else {
+      return ApiResponse.error(res, result.error || 'Erro ao processar pagamento', 400);
+    }
+  });
+
+  /**
+   * GET /api/guardians/pagamento/carteiras
+   * Obter carteiras M-Pesa disponíveis
+   */
+  getMpesaWallets = asyncHandler(async (req: Request, res: Response) => {
+    try {
+      const result = await this.service.getMpesaWallets();
+      
+      console.log('📱 M-Pesa Wallets Result:', result);
+      
+      if (result.success) {
+        // result.wallets já contém o array de carteiras da API M-Pesa
+        return ApiResponse.success(res, result.wallets || [], 'Carteiras obtidas com sucesso');
+      } else {
+        console.error('❌ Erro ao obter carteiras:', result.error);
+        return ApiResponse.error(res, result.error || 'Erro ao obter carteiras', 400);
+      }
+    } catch (error: any) {
+      console.error('❌ Exceção ao obter carteiras:', error.message);
+      return ApiResponse.error(res, 'Erro ao conectar com M-Pesa', 500);
+    }
+  });
 }

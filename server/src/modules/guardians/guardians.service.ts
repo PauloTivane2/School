@@ -1,6 +1,10 @@
 import { GuardiansRepository } from './guardians.repository';
 import { Guardian, GuardianWithRelations } from './guardian.entity';
 import { CreateGuardianDTO, UpdateGuardianDTO, GuardianFilters } from './dto';
+import { pool } from '../../config/database';
+import { PDFService } from '../../services/pdf.service';
+import { MpesaPaymentService } from '../../services/mpesa-payment.service';
+import { Response } from 'express';
 
 /**
  * Service para lógica de negócio relacionada a Encarregados
@@ -124,5 +128,214 @@ export class GuardiansService {
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+  }
+
+  /**
+   * Mapear ID do funcionário para ID do encarregado (via email)
+   * @param funcionarioId - ID do funcionário (tabela funcionarios)
+   * @returns ID do encarregado (tabela encarregados)
+   */
+  private async mapFuncionarioToEncarregado(funcionarioId: number): Promise<number> {
+    // Buscar email do funcionário
+    const funcionario = await pool.query(
+      'SELECT email FROM funcionarios WHERE id_funcionarios = $1',
+      [funcionarioId]
+    );
+    
+    if (funcionario.rows.length === 0) {
+      throw new Error('Funcionário não encontrado');
+    }
+    
+    const email = funcionario.rows[0].email;
+    
+    // Buscar encarregado pelo email
+    const encarregado = await pool.query(
+      'SELECT id_encarregados FROM encarregados WHERE email = $1',
+      [email]
+    );
+    
+    if (encarregado.rows.length === 0) {
+      throw new Error('Encarregado não encontrado no sistema. Verifique se o cadastro está completo.');
+    }
+    
+    return encarregado.rows[0].id_encarregados;
+  }
+
+  /**
+   * Obter alunos de um encarregado específico
+   * RN: Encarregado só vê seus próprios educandos
+   */
+  async getGuardianStudents(guardianId: number): Promise<any[]> {
+    return await this.repository.getGuardianStudents(guardianId);
+  }
+
+  /**
+   * Obter dashboard do encarregado
+   * Contém: resumo dos alunos, alertas, próximos eventos
+   * @param funcionarioId - ID do funcionário (login)
+   */
+  async getGuardianDashboard(funcionarioId: number): Promise<any> {
+    const guardianId = await this.mapFuncionarioToEncarregado(funcionarioId);
+    return await this.repository.getGuardianDashboard(guardianId);
+  }
+
+  /**
+   * Obter notas de um aluno (verificando se é educando do encarregado)
+   */
+  async getStudentGrades(guardianId: number, studentId: number): Promise<any[]> {
+    // Verificar se o aluno pertence ao encarregado
+    await this.verifyStudentOwnership(guardianId, studentId);
+    return await this.repository.getStudentGrades(studentId);
+  }
+
+  /**
+   * Obter presenças de um aluno (verificando se é educando do encarregado)
+   */
+  async getStudentAttendance(guardianId: number, studentId: number): Promise<any[]> {
+    await this.verifyStudentOwnership(guardianId, studentId);
+    return await this.repository.getStudentAttendance(studentId);
+  }
+
+  /**
+   * Obter pagamentos de um aluno (verificando se é educando do encarregado)
+   */
+  async getStudentPayments(guardianId: number, studentId: number): Promise<any[]> {
+    await this.verifyStudentOwnership(guardianId, studentId);
+    return await this.repository.getStudentPayments(studentId);
+  }
+
+  /**
+   * Obter exames de um aluno (verificando se é educando do encarregado)
+   */
+  async getStudentExams(guardianId: number, studentId: number): Promise<any[]> {
+    await this.verifyStudentOwnership(guardianId, studentId);
+    return await this.repository.getStudentExams(studentId);
+  }
+
+  /**
+   * Exportar relatório de um aluno em PDF
+   */
+  async exportStudentReport(
+    funcionarioId: number,
+    studentId: number,
+    type: 'completo' | 'presencas' | 'pagamentos',
+    res: Response
+  ): Promise<void> {
+    // Mapear funcionario para encarregado
+    const guardianId = await this.mapFuncionarioToEncarregado(funcionarioId);
+    
+    // Verificar se o aluno pertence ao encarregado
+    await this.verifyStudentOwnership(guardianId, studentId);
+    
+    // Buscar dados do aluno
+    const students = await this.repository.getGuardianStudents(guardianId);
+    const student = students.find(s => s.id_aluno === studentId);
+    
+    if (!student) {
+      throw new Error('Aluno não encontrado');
+    }
+    
+    // Buscar dados baseados no tipo de relatório
+    const payments = type === 'completo' || type === 'pagamentos' 
+      ? await this.repository.getStudentPayments(studentId)
+      : [];
+    
+    const attendance = type === 'completo' || type === 'presencas'
+      ? await this.repository.getStudentAttendance(studentId)
+      : [];
+    
+    // Gerar PDF
+    switch (type) {
+      case 'completo':
+        await PDFService.generateCompleteReport(student, payments, attendance, res);
+        break;
+      case 'pagamentos':
+        await PDFService.generatePaymentsReport(student, payments, res);
+        break;
+      case 'presencas':
+        await PDFService.generateAttendanceReport(student, attendance, res);
+        break;
+    }
+  }
+
+  /**
+   * Processar pagamento M-Pesa para mensalidade
+   */
+  async processMpesaPayment(
+    funcionarioId: number,
+    studentId: number,
+    amount: number,
+    msisdn: string,
+    walletId: string,
+    reference?: string
+  ): Promise<any> {
+    // Mapear funcionario para encarregado
+    const guardianId = await this.mapFuncionarioToEncarregado(funcionarioId);
+    
+    // Verificar se o aluno pertence ao encarregado
+    await this.verifyStudentOwnership(guardianId, studentId);
+    
+    // Processar pagamento M-Pesa
+    const mpesaService = new MpesaPaymentService();
+    
+    const paymentResult = await mpesaService.handleC2BPayment({
+      walletId,
+      amount,
+      msisdn,
+      reference: reference || `MENSALIDADE-${studentId}-${Date.now()}`,
+      third_party_reference: `ALUNO-${studentId}`
+    });
+    
+    if (paymentResult.success) {
+      // Registrar pagamento no banco de dados
+      try {
+        await pool.query(
+          `INSERT INTO pagamentos (aluno_id, valor, data_pagamento, estado, metodo_pagamento, referencia)
+           VALUES ($1, $2, NOW(), $3, 'M-Pesa', $4)`,
+          [studentId, amount, 'pago', paymentResult.transaction_id]
+        );
+      } catch (dbError) {
+        console.error('Erro ao registrar pagamento no BD:', dbError);
+      }
+    }
+    
+    return paymentResult;
+  }
+
+  /**
+   * Obter carteiras M-Pesa disponíveis
+   */
+  async getMpesaWallets(): Promise<any> {
+    const mpesaService = new MpesaPaymentService();
+    const result = await mpesaService.getMyWallets();
+    
+    // Se falhar, retornar carteira de teste para desenvolvimento
+    if (!result.success || !result.wallets || result.wallets.length === 0) {
+      console.warn('⚠️ Usando carteira de teste (API M-Pesa não disponível)');
+      return {
+        success: true,
+        wallets: [
+          {
+            id: 'test-wallet-1',
+            name: 'Carteira Teste',
+            number: '258840000000',
+            balance: 0
+          }
+        ]
+      };
+    }
+    
+    return result;
+  }
+
+  /**
+   * Verificar se o aluno pertence ao encarregado
+   * Lança erro se não pertencer
+   */
+  private async verifyStudentOwnership(guardianId: number, studentId: number): Promise<void> {
+    const isOwner = await this.repository.isStudentOwnedByGuardian(guardianId, studentId);
+    if (!isOwner) {
+      throw new Error('Você não tem permissão para acessar dados deste aluno');
+    }
   }
 }

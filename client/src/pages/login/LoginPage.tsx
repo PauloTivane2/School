@@ -10,6 +10,7 @@ interface LoginProps {
 export default function LoginPage({ onLoginSuccess, onForgotPassword }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [dialog, setDialog] = useState<{
     isOpen: boolean;
@@ -66,7 +67,7 @@ export default function LoginPage({ onLoginSuccess, onForgotPassword }: LoginPro
       <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-8 border border-border-light">
         {/* Título */}
         <div className="text-center mb-8">
-          <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center mx-auto mb-4">
+          <div className={`w-20 h-20 rounded-full bg-primary flex items-center justify-center mx-auto mb-4 ${isLoading ? 'animate-spin' : ''}`}>
             <img
               src="https://cdn-icons-png.flaticon.com/512/29/29302.png"
               alt="Livro"
@@ -95,35 +96,50 @@ export default function LoginPage({ onLoginSuccess, onForgotPassword }: LoginPro
           </div>
           <div>
             <label className="block mb-2 text-sm font-medium text-text-primary">Senha</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Digite sua senha"
-              className="input-field"
-              aria-label="Senha"
-              disabled={isLoading}
-              onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Digite sua senha"
+                className="input-field pr-10"
+                aria-label="Senha"
+                disabled={isLoading}
+                onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-gray hover:text-text-primary transition-colors"
+                aria-label={showPassword ? "Esconder senha" : "Mostrar senha"}
+                disabled={isLoading}
+              >
+                {showPassword ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clipRule="evenodd" />
+                    <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                    <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
 
-          {/* Botões */}
-          <div className="flex gap-3 mt-6">
-            <button
-              type="button"
-              onClick={() => window.close()}
-              className="btn-secondary flex-1"
-              aria-label="Cancelar"
-              disabled={isLoading}
-            >
-              Cancelar
-            </button>
+          {/* Botão */}
+          <div className="mt-6">
             <button
               type="submit"
-              className="btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
               aria-label="Entrar"
               disabled={isLoading}
             >
+              {isLoading && (
+                <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true"></span>
+              )}
               {isLoading ? 'Entrando...' : 'Entrar'}
             </button>
           </div>

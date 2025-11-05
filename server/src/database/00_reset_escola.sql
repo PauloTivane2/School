@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS funcionarios (
     bi VARCHAR(50) UNIQUE,
     nuit VARCHAR(50) UNIQUE,
     nivel_academico VARCHAR(100),
-    funcao VARCHAR(50) NOT NULL CHECK (funcao IN ('Professor', 'Diretor', 'Secretaria', 'Admin')),
+    funcao VARCHAR(50) NOT NULL CHECK (funcao IN ('Professor', 'Diretor', 'Secretaria', 'Admin', 'Encarregado', 'Tesouraria')),
     email VARCHAR(100) UNIQUE,
     estado VARCHAR(20) DEFAULT 'inativo' CHECK (estado IN ('ativo', 'inativo')),
     senha_hash TEXT DEFAULT crypt('123456', gen_salt('bf'))

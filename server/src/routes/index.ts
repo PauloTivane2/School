@@ -19,8 +19,14 @@ import disciplinasRoutes from './disciplinas.routes';
 import agendaRoutes from './agendaRoutes';
 import dropdownsRoutes from './dropdownsRoutes';
 import mpesaRoutes from './mpesa.routes';
+import { authMiddleware } from '../middleware/auth.middleware';
+import { authorize, teacherScopeMiddleware, guardianScopeMiddleware } from '../middleware/rbac.middleware';
+import { auditLogMiddleware, financialAuditMiddleware, gradeAuditMiddleware } from '../middleware/audit-log.middleware';
 
 const router = Router();
+
+// Apply audit logging to all routes
+router.use(auditLogMiddleware);
 
 /**
  * ===== ROTAS REFATORADAS COM PADRÃO MVC =====
@@ -29,26 +35,27 @@ const router = Router();
  * RF10-RF11: Frequência
  * RF12-RF14: Notas
  */
-router.use('/students', studentsRoutes);           // RF01: Gestão de Alunos (CRUD completo)
-router.use('/guardians', guardiansRoutes);         // RF02: Gestão de Encarregados (CRUD completo)
-router.use('/staff', staffRoutes);                 // RF03: Gestão de Funcionários/Docentes (CRUD completo)
-router.use('/classes', classesRoutes);             // RF04: Gestão de Classes, Turmas e Horários (CRUD completo)
-router.use('/payments', paymentsRoutes);           // RF05-RF09: Financeiro (Pagamentos)
-router.use('/attendance', attendanceRoutes);       // RF10-RF11: Frequência (Presenças)
-router.use('/grades', gradesRoutes);               // RF12-RF14: Notas e Boletins
-router.use('/relatorios', reportsRoutes);          // RF15-RF19: Relatórios (Financeiro, Frequência, Acadêmico)
+// RN01, RN04: Role-based access with data scoping
+router.use('/students', authMiddleware, authorize('Admin', 'Professor', 'Encarregado'), guardianScopeMiddleware, teacherScopeMiddleware, studentsRoutes);           // RF01: Gestão de Alunos
+router.use('/guardians', authMiddleware, authorize('Admin', 'Encarregado'), guardianScopeMiddleware, guardiansRoutes);                      // RF02: Encarregados
+router.use('/staff', authMiddleware, authorize('Admin'), staffRoutes);                                             // RF03: Funcionários (Admin only)
+router.use('/classes', authMiddleware, authorize('Admin', 'Professor'), teacherScopeMiddleware, classesRoutes);                            // RF04: Classes/Turmas
+router.use('/payments', authMiddleware, authorize('Admin', 'Tesouraria'), financialAuditMiddleware, paymentsRoutes);                         // RF05-RF09: Financeiro
+router.use('/attendance', authMiddleware, authorize('Admin', 'Professor'), teacherScopeMiddleware, attendanceRoutes);                      // RF10-RF11: Presenças
+router.use('/grades', authMiddleware, authorize('Admin', 'Professor'), gradeAuditMiddleware, teacherScopeMiddleware, gradesRoutes);                              // RF12-RF14: Notas
+router.use('/relatorios', authMiddleware, authorize('Admin', 'Professor', 'Tesouraria'), reportsRoutes);           // RF15-RF19: Relatórios
 
 /**
  * ===== ROTAS EXISTENTES (MANTIDAS PARA COMPATIBILIDADE) =====
  */
-router.use('/auth', authRoutes);                   // Autenticação (Login/Logout)
-router.use('/funcionarios', funcionariosRoutes);   // RF03: Gestão de Funcionários
-router.use('/encarregados', encarregadosRoutes);   // RF02: Gestão de Encarregados
-router.use('/disciplinas', disciplinasRoutes);     // Disciplinas
-router.use('/agenda', agendaRoutes);               // Agenda
-router.use('/dropdowns', dropdownsRoutes);         // Dados para dropdowns
-router.use('/admin', adminRoutes);                 // RF20-RF21: Administração
-router.use('/mpesa', mpesaRoutes);                 // Pagamentos M-Pesa
+router.use('/auth', authRoutes);                                                                                   // Autenticação (Login/Logout)
+router.use('/funcionarios', authMiddleware, authorize('Admin'), funcionariosRoutes);                                // RF03: Funcionários (Admin only)
+router.use('/encarregados', authMiddleware, authorize('Admin', 'Encarregado'), guardianScopeMiddleware, encarregadosRoutes);                 // RF02: Encarregados
+router.use('/disciplinas', authMiddleware, authorize('Admin', 'Professor'), disciplinasRoutes);                     // Disciplinas
+router.use('/agenda', authMiddleware, authorize('Admin', 'Professor'), teacherScopeMiddleware, agendaRoutes);                               // Agenda
+router.use('/dropdowns', authMiddleware, dropdownsRoutes);                                                          // Dados para dropdowns
+router.use('/admin', authMiddleware, authorize('Admin'), adminRoutes);                                              // Administração (Admin only)
+router.use('/mpesa', authMiddleware, authorize('Admin', 'Tesouraria'), financialAuditMiddleware, mpesaRoutes);                                // Pagamentos M-Pesa
 
 // Rota raiz da API
 router.get('/', (_req: Request, res: Response) => {
@@ -66,3 +73,4 @@ router.get('/', (_req: Request, res: Response) => {
 });
 
 export default router;
+

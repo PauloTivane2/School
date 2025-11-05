@@ -16,6 +16,7 @@ interface AuthResponse {
     nome: string;
     email: string;
     funcao: string;
+    role?: string;
   };
   message?: string;
 }
@@ -40,6 +41,8 @@ export class AuthService {
 
       if (result.rows.length === 0) {
         console.log('❌ Nenhum usuário encontrado com este email');
+        // RN05: log de autenticação (falha)
+        try { await pool.query('INSERT INTO auth_logs (email, status, motivo) VALUES ($1, $2, $3)', [email, 'falha', 'email_nao_encontrado']); } catch {}
         return {
           success: false,
           message: 'Credenciais inválidas ou usuário inativo',
@@ -61,9 +64,74 @@ export class AuthService {
 
       if (!isPasswordValid) {
         console.log('❌ Senha incorreta');
+        // RN05: log de autenticação (falha)
+        try { await pool.query('INSERT INTO auth_logs (email, status, motivo, user_id) VALUES ($1, $2, $3, $4)', [email, 'falha', 'senha_incorreta', user.id_funcionarios]); } catch {}
         return {
           success: false,
           message: 'Credenciais inválidas',
+        };
+      }
+
+      // Mapear função para role padronizado
+      const mapRole = (funcao: string): string => {
+        const v = (funcao || '').toLowerCase();
+        if (['admin', 'diretor', 'director'].includes(v)) return 'Admin';
+        if (['tesouraria', 'tesoureiro', 'financeiro'].includes(v)) return 'Tesouraria';
+        if (['professor', 'docente'].includes(v)) return 'Professor';
+        if (['encarregado', 'guardiao', 'guardian'].includes(v)) return 'Encarregado';
+        if (['aluno', 'estudante', 'student'].includes(v)) return 'Aluno';
+        return funcao;
+      };
+
+      const role = mapRole(user.funcao);
+
+      // RN02: Bloquear acesso a alunos (menores não têm acesso)
+      if (role === 'Aluno') {
+        // Verificar se é um aluno no banco de dados
+        const studentCheck = await pool.query(
+          'SELECT id_alunos, data_nascimento FROM alunos WHERE email = $1',
+          [email]
+        );
+
+        if (studentCheck.rows.length > 0) {
+          const student = studentCheck.rows[0];
+          const birthDate = new Date(student.data_nascimento);
+          const today = new Date();
+          const age = today.getFullYear() - birthDate.getFullYear();
+          const monthDiff = today.getMonth() - birthDate.getMonth();
+          
+          // Calculate exact age
+          const exactAge = (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) 
+            ? age - 1 
+            : age;
+
+          // RN05: log de autenticação (bloqueado)
+          try { 
+            await pool.query(
+              'INSERT INTO auth_logs (email, status, motivo, user_id, details) VALUES ($1, $2, $3, $4, $5)', 
+              [
+                email, 
+                'bloqueado', 
+                exactAge < 18 ? 'estudante_menor_idade' : 'aluno_sem_acesso', 
+                user.id_funcionarios,
+                JSON.stringify({ idade: exactAge, data_nascimento: birthDate })
+              ]
+            ); 
+          } catch {}
+          
+          return {
+            success: false,
+            message: exactAge < 18 
+              ? `Acesso bloqueado para estudantes menores de idade (${exactAge} anos)` 
+              : 'Acesso bloqueado para alunos',
+          };
+        }
+
+        // If not found as student, still block
+        try { await pool.query('INSERT INTO auth_logs (email, status, motivo, user_id) VALUES ($1, $2, $3, $4)', [email, 'bloqueado', 'aluno_sem_acesso', user.id_funcionarios]); } catch {}
+        return {
+          success: false,
+          message: 'Acesso bloqueado para alunos',
         };
       }
 
@@ -75,10 +143,14 @@ export class AuthService {
           userId: user.id_funcionarios,
           email: user.email,
           funcao: user.funcao,
+          role,
         },
         config.jwt.secret as string,
         { expiresIn: config.jwt.expiresIn } as SignOptions
       );
+
+      // RN05: log de autenticação (sucesso)
+      try { await pool.query('INSERT INTO auth_logs (email, status, user_id) VALUES ($1, $2, $3)', [email, 'sucesso', user.id_funcionarios]); } catch {}
 
       return {
         success: true,
@@ -88,6 +160,7 @@ export class AuthService {
           nome: user.nome_funcionario,
           email: user.email,
           funcao: user.funcao,
+          role, // Incluir role padronizado para uso no frontend
         },
       };
     } catch (error: any) {
@@ -107,3 +180,4 @@ export class AuthService {
     }
   }
 }
+
